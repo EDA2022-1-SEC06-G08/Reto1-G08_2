@@ -31,8 +31,133 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de libros
 
+def newController():
+    """
+    Crea una instancia del modelo
+    """
+    control = {
+        'model': None
+    }
+    control['model'] = model.newCatalog()
+    return control
+
+
 # Funciones para la carga de datos
+
+def loadData(control):
+    """
+    Carga los datos de los archivos y cargar los datos en la
+    estructura de datos
+    """
+    catalog = control['model']
+    tracks = loadTracks(catalog)
+    artists = loadArtists(catalog)
+    albums = loadAlbums(catalog)
+    
+    tracks_3i = getFirstTracks()
+    tracks_3f = getLastTracks()
+
+    artists_3i = getFirstArtists()
+    artists_3f = getLastArtists()
+
+    albums_3i = getFirstAlbums()
+    albums_3f = getLastAlbums()
+
+    sort(catalog)
+    return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
+
+
+def loadTracks(catalog):
+    """
+    Carga todos los tracks del archivo y los agrega a la lista de tracks
+    """
+    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-small.csv'
+    input_file = csv.DictReader(open(tracksfile, encoding='utf-8'))
+    for track in input_file:
+        model.addTrack(catalog, track)
+    return model.trackSize(catalog)
+
+
+def loadArtists(catalog):
+    """
+    Carga todos los artistas del archivo y los agrega a la lista de artistas
+    """
+    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-small.csv'
+    input_file = csv.DictReader(open(artistfile, encoding='utf-8'))
+    for artist in input_file:
+        model.addArtist(catalog, artist)
+    return model.artistSize(catalog)
+
+
+def loadAlbums(catalog):
+    """
+    Carga todos los álbumes del archivo y los agrega a la lista de álbumes
+    """
+    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-small.csv'
+    input_file = csv.DictReader(open(albumsfile, encoding='utf-8'))
+    for album in input_file:
+        model.addBookTag(catalog, album)
+    return model.albumSize(catalog)
+
 
 # Funciones de ordenamiento
 
+def sort(catalog):
+    """
+    Llama a otras funciones para ordenar el catalog entero
+    """
+    sortTracks(catalog)
+    sortArtists(catalog)
+    sortAlbums(catalog)
+
+def sortTracks(catalog):
+    """
+    Ordena las tracks mediante model.py
+    """
+
+    model.sortTracks(catalog)
+
+def sortArtists(catalog):
+    """
+    Ordena los artistas mediante model.py
+    """
+
+    model.sortArtists(catalog)
+
+def sortAlbums(catalog):
+    """
+    Ordena los álbumes mediante model.py
+    """
+
+    model.sortAlbums(catalog)
+
+
 # Funciones de consulta sobre el catálogo
+
+def getFirstTracks():
+    """
+    Obtiene los primeros 3 tracks de la lista de tracks
+    """
+
+    model.getFirstTracks()
+
+def getFirstArtists():
+    """
+    Obtiene los primeros 3 artistas de la lista de artistas
+    """
+
+    model.getFirstArtists()
+
+def getFirstTracks():
+    """
+    Obtiene los primeros 3 tracks de la lista de tracks
+    """
+
+    model.getFirstTracks()
+
+def getFirstTracks():
+    """
+    Obtiene los primeros 3 tracks de la lista de tracks
+    """
+
+    model.getFirstTracks()
