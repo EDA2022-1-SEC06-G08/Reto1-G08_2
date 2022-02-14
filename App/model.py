@@ -37,12 +37,134 @@ los mismos.
 
 # Construccion de modelos
 
+def newCatalog():
+    """
+    Inicializa el catálogo. Crea una lista vacia para guardar
+    todos los tracks, adicionalmente, crea una lista vacia para los artistas
+    y una lista vacia para los álbumes.
+    Retorna el catalogo inicializado.
+    """
+    catalog = {'tracks': None,
+               'artists': None,
+               'albums': None}
+
+    catalog['tracks'] = lt.newList('ARRAY_LIST')
+                                    #cmpfunction = compareTracks)
+    catalog['artists'] = lt.newList('ARRAY_LIST')
+                                    #cmpfunction=compareArtists)
+    catalog['albums'] = lt.newList('ARRAY_LIST')
+                                    #cmpfunction=compareAlbums)
+
+    return catalog
+
+
 # Funciones para agregar informacion al catalogo
+
+def addTrack(catalog, track):
+    # Se adiciona el track a la lista de tracks
+    lt.addLast(catalog['tracks'], track)
+    return catalog
+
+def addArtist(catalog, artist):
+    # Se adiciona el artista a la lista de artistas
+    lt.addLast(catalog['artists'], artist)
+    return catalog
+
+def addAlbum(catalog, album):
+    # Se adiciona el album a la lista de álbumes
+    lt.addLast(catalog['albums'], album)
+    return catalog
+
 
 # Funciones para creacion de datos
 
+def trackSize(catalog):
+    return lt.size(catalog['tracks'])
+
+def artistSize(catalog):
+    return lt.size(catalog['artists'])
+
+def albumSize(catalog):
+    return lt.size(catalog['albums'])
+
+
 # Funciones de consulta
+
+def getFirstTracks(catalog):
+    t_3i = lt.newList('ARRAY_LIST')
+    for pos in range(4):
+        track = lt.getElement(catalog['tracks'], pos)
+        lt.addLast(t_3i, track)
+
+    return t_3i
+
+def getLastTracks(catalog):
+    t_3f = lt.newList('ARRAY_LIST')
+    size = lt.size(catalog['tracks'])
+    for pos in range(size-4, size):
+        track = lt.getElement(catalog['tracks'], pos)
+        lt.addLast(t_3f, track)
+
+    return t_3f
+
+def getFirstArtists(catalog):
+    Ar_3i = lt.newList('ARRAY_LIST')
+    for pos in range(4):
+        artist = lt.getElement(catalog['artists'], pos)
+        lt.addLast(Ar_3i, artist)
+
+    return Ar_3i
+
+def getLastArtists(catalog):
+    Ar_3f = lt.newList('ARRAY_LIST')
+    size = lt.size(catalog['artists'])
+    for pos in range(size-4, size):
+        artist = lt.getElement(catalog['artists'], pos)
+        lt.addLast(Ar_3f, artist)
+
+    return Ar_3f
+
+def getFirstAlbums(catalog):
+    Al_3i = lt.newList('ARRAY_LIST')
+    for pos in range(4):
+        album = lt.getElement(catalog['albums'], pos)
+        lt.addLast(Al_3i, album)
+
+    return Al_3i
+
+def getLastAlbums(catalog):
+    Al_3f = lt.newList('ARRAY_LIST')
+    size = lt.size(catalog['albums'])
+    for pos in range(size-4, size):
+        album = lt.getElement(catalog['albums'], pos)
+        lt.addLast(Al_3f, album)
+
+    return Al_3f
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+#def compareTracks():
+
+
+
+#def compareArtists():
+
+
+
+#def compareAlbums():
+
+
+
 # Funciones de ordenamiento
+
+#def sortTracks():
+
+
+
+#def sortArtists():
+    
+
+
+#def sortAlbums():
+
