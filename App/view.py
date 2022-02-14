@@ -58,26 +58,38 @@ def loadData():
 
 #Funciones de impresión
 
-def printTracks(num, t_3i, t_f):
+def printTracks(num, t_3i, t_3f):
     
     print('Tracks cargadas: ' + str(num))
-    print('Primeras 3 tracks' + t_3i)
-    print("." + "\n." + "\n.")
-    print('Últimas 3 tracks' + t_3f)
+    print('Primeras 3 canciones: ')
+    for track in t_3i:
+        print('Nombre: ' + track['name'] + '\nPaíses donde está disponible: ' + track['available_markets'] + '\nDuración: ' + track['duration_ms'] + '\nID en el álbum: ' + track['album_id'])
+    print("\n."*5 + "\n")
+    print('Últimas 3 canciones: ')
+    for track in t_3f:
+        print('Nombre: ' + track['name'] + '\nPaíses donde está disponible: ' + track['available_markets'] + '\nDuración: ' + track['duration_ms'] + '\nID en el álbum: ' + track['album_id'])
 
-def printArtists(num, Ar_3i, Ar_f):
+def printArtists(num, Ar_3i, Ar_3f):
     
-    print('Tracks cargadas: ' + str(num))
-    print('Primeras 3 tracks' + Ar_3i)
-    print("." + "\n." + "\n.")
-    print('Últimas 3 tracks' + Ar_3f)
+    print('Artistas cargados: ' + str(num))
+    for artist in Ar_3i:
+        print('Nombre: ' + artist['name'] + '\nGéneros: ' + artist['genres'] + '\nPopularidad: ' + artist['artist_popularity'] + '\nNúmero de seguidores: ' + artist['followers'])
+    print('Primeros 3 artistas')
+    print("\n."*5 + "\n")
+    print('Últimos 3 artistas')
+    for artist in Ar_3f:
+        print('Nombre: ' + artist['name'] + '\nGéneros: ' + artist['genres'] + '\nPopularidad: ' + artist['artist_popularity'] + '\nNúmero de seguidores: ' + artist['followers'])
 
-def printAlbums(num, Al_3i, Al_f):
+def printAlbums(num, Al_3i, Al_3f):
     
-    print('Tracks cargadas: ' + str(num))
-    print('Primeras 3 tracks' + Al_3i)
-    print("." + "\n." + "\n.")
-    print('Últimas 3 tracks' + Al_3f)
+    print('Álbumes cargados: ' + str(num))
+    print('Primeros 3 álbumes')
+    for album in Al_3i:
+        print('Nombre: ' + album['name'] + '\nTipo de álbum: ' + album['album_type'] + '\nMercados donde está disponible: ' + album['available_markets'] + '\nFecha de lanzamiento: ' + album['release_date'])
+    print("\n."*5 + "\n")
+    print('Últimos 3 álbumes')
+    for album in Al_3f:
+        print('Nombre: ' + album['name'] + '\nTipo de álbum: ' + album['album_type'] + '\nMercados donde está disponible: ' + album['available_markets'] + '\nFecha de lanzamiento: ' + album['release_date'])
 
 
 #Interfaz
