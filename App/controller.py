@@ -54,16 +54,16 @@ def loadData(control):
     artists = loadArtists(catalog)
     albums = loadAlbums(catalog)
     
-    tracks_3i = getFirstTracks()
-    tracks_3f = getLastTracks()
+    tracks_3i = getFirstTracks(catalog)
+    tracks_3f = getLastTracks(catalog)
 
-    artists_3i = getFirstArtists()
-    artists_3f = getLastArtists()
+    artists_3i = getFirstArtists(catalog)
+    artists_3f = getLastArtists(catalog)
 
-    albums_3i = getFirstAlbums()
-    albums_3f = getLastAlbums()
+    albums_3i = getFirstAlbums(catalog)
+    albums_3f = getLastAlbums(catalog)
 
-    sort(catalog)
+    #sort(catalog)
     return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
@@ -96,7 +96,7 @@ def loadAlbums(catalog):
     albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-small.csv'
     input_file = csv.DictReader(open(albumsfile, encoding='utf-8'))
     for album in input_file:
-        model.addBookTag(catalog, album)
+        model.addAlbum(catalog, album)
     return model.albumSize(catalog)
 
 
@@ -134,30 +134,44 @@ def sortAlbums(catalog):
 
 # Funciones de consulta sobre el catálogo
 
-def getFirstTracks():
+def getFirstTracks(catalog):
     """
     Obtiene los primeros 3 tracks de la lista de tracks
     """
 
-    model.getFirstTracks()
+    model.getFirstTracks(catalog)
 
-def getFirstArtists():
+def getLastTracks(catalog):
+    """
+    Obtiene los últimos 3 tracks de la lista de tracks
+    """
+
+    model.getLastTracks(catalog)
+
+def getFirstArtists(catalog):
     """
     Obtiene los primeros 3 artistas de la lista de artistas
     """
 
-    model.getFirstArtists()
+    model.getFirstArtists(catalog)
 
-def getFirstTracks():
+def getLastArtists(catalog):
     """
-    Obtiene los primeros 3 tracks de la lista de tracks
-    """
-
-    model.getFirstTracks()
-
-def getFirstTracks():
-    """
-    Obtiene los primeros 3 tracks de la lista de tracks
+    Obtiene los últimos 3 artistas de la lista de artistas
     """
 
-    model.getFirstTracks()
+    model.getFirstTracks(catalog)
+
+def getFirstAlbums(catalog):
+    """
+    Obtiene los primeros 3 álbumes de la lista de álbumes
+    """
+
+    model.getFirstAlbums(catalog)
+
+def getLastAlbums(catalog):
+    """
+    Obtiene los últimos 3 álbumes de la lista de álbumes
+    """
+
+    model.getLastAlbums(catalog)
