@@ -22,10 +22,12 @@
 
 import config as cf
 import sys
+import csv
 import controller
 from DISClib.ADT import list as lt
 assert cf
 
+sys.maxsize
 
 """
 La vista se encarga de la interacción con el usuario
@@ -60,35 +62,35 @@ def loadData():
 
 def printTracks(num, t_3i, t_3f):
     
-    print('Tracks cargadas: ' + str(num))
+    print('Tracks cargadas: ' + str(num) + '\n')
     print('Primeras 3 canciones: ')
-    for track in t_3i:
+    for track in lt.iterator(t_3i):
         print('Nombre: ' + track['name'] + '\nPaíses donde está disponible: ' + track['available_markets'] + '\nDuración: ' + track['duration_ms'] + '\nID en el álbum: ' + track['album_id'])
     print("\n."*5 + "\n")
     print('Últimas 3 canciones: ')
-    for track in t_3f:
+    for track in lt.iterator(t_3f):
         print('Nombre: ' + track['name'] + '\nPaíses donde está disponible: ' + track['available_markets'] + '\nDuración: ' + track['duration_ms'] + '\nID en el álbum: ' + track['album_id'])
 
 def printArtists(num, Ar_3i, Ar_3f):
     
-    print('Artistas cargados: ' + str(num))
-    for artist in Ar_3i:
-        print('Nombre: ' + artist['name'] + '\nGéneros: ' + artist['genres'] + '\nPopularidad: ' + artist['artist_popularity'] + '\nNúmero de seguidores: ' + artist['followers'])
+    print('Artistas cargados: ' + str(num) + '\n')
     print('Primeros 3 artistas')
+    for artist in lt.iterator(Ar_3i):
+        print('Nombre: ' + artist['name'] + '\nGéneros: ' + artist['genres'] + '\nPopularidad: ' + artist['artist_popularity'] + '\nNúmero de seguidores: ' + artist['followers'])
     print("\n."*5 + "\n")
     print('Últimos 3 artistas')
-    for artist in Ar_3f:
+    for artist in lt.iterator(Ar_3f):
         print('Nombre: ' + artist['name'] + '\nGéneros: ' + artist['genres'] + '\nPopularidad: ' + artist['artist_popularity'] + '\nNúmero de seguidores: ' + artist['followers'])
 
 def printAlbums(num, Al_3i, Al_3f):
     
-    print('Álbumes cargados: ' + str(num))
+    print('Álbumes cargados: ' + str(num) + '\n')
     print('Primeros 3 álbumes')
-    for album in Al_3i:
+    for album in lt.iterator(Al_3i):
         print('Nombre: ' + album['name'] + '\nTipo de álbum: ' + album['album_type'] + '\nMercados donde está disponible: ' + album['available_markets'] + '\nFecha de lanzamiento: ' + album['release_date'])
     print("\n."*5 + "\n")
     print('Últimos 3 álbumes')
-    for album in Al_3f:
+    for album in lt.iterator(Al_3f):
         print('Nombre: ' + album['name'] + '\nTipo de álbum: ' + album['album_type'] + '\nMercados donde está disponible: ' + album['available_markets'] + '\nFecha de lanzamiento: ' + album['release_date'])
 
 
@@ -109,7 +111,9 @@ while True:
         print("Cargando información de los archivos ....")
         num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData()
         printTracks(num_tracks, tracks_3i, tracks_3f)
+        print("\n."*10 + "\n")
         printArtists(num_artists, artists_3i, artists_3f)
+        print("\n."*10 + "\n")
         printAlbums(num_albums, albums_3i, albums_3f)
 
 

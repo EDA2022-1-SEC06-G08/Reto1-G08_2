@@ -20,10 +20,13 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from App.model import trackSize
 import config as cf
 import model
+import sys
 import csv
 
+sys.maxsize
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -71,7 +74,7 @@ def loadTracks(catalog):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
-    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-small.csv'
+    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-10pct.csv'
     input_file = csv.DictReader(open(tracksfile, encoding='utf-8'))
     for track in input_file:
         model.addTrack(catalog, track)
@@ -82,7 +85,7 @@ def loadArtists(catalog):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
-    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-small.csv'
+    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-10pct.csv'
     input_file = csv.DictReader(open(artistfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
@@ -93,7 +96,7 @@ def loadAlbums(catalog):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """
-    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-small.csv'
+    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-10pct.csv'
     input_file = csv.DictReader(open(albumsfile, encoding='utf-8'))
     for album in input_file:
         model.addAlbum(catalog, album)
@@ -139,39 +142,52 @@ def getFirstTracks(catalog):
     Obtiene los primeros 3 tracks de la lista de tracks
     """
 
-    model.getFirstTracks(catalog)
+    tracks = model.getFirstTracks(catalog)
+
+    return tracks
 
 def getLastTracks(catalog):
     """
     Obtiene los últimos 3 tracks de la lista de tracks
     """
 
-    model.getLastTracks(catalog)
+    tracks = model.getLastTracks(catalog)
+    
+    return tracks
 
 def getFirstArtists(catalog):
     """
     Obtiene los primeros 3 artistas de la lista de artistas
     """
 
-    model.getFirstArtists(catalog)
+    artists = model.getFirstArtists(catalog)
+
+    return artists
 
 def getLastArtists(catalog):
     """
     Obtiene los últimos 3 artistas de la lista de artistas
     """
 
-    model.getFirstTracks(catalog)
+    artists = model.getLastArtists(catalog)
+
+    return artists
 
 def getFirstAlbums(catalog):
     """
     Obtiene los primeros 3 álbumes de la lista de álbumes
     """
 
-    model.getFirstAlbums(catalog)
+    albums = model.getFirstAlbums(catalog)
+
+
+    return albums
 
 def getLastAlbums(catalog):
     """
     Obtiene los últimos 3 álbumes de la lista de álbumes
     """
 
-    model.getLastAlbums(catalog)
+    albums = model.getLastAlbums(catalog)
+
+    return albums

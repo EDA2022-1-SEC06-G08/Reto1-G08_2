@@ -26,9 +26,12 @@
 
 
 import config as cf
+import sys
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
+
+sys.maxsize
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -92,7 +95,7 @@ def albumSize(catalog):
 
 def getFirstTracks(catalog):
     t_3i = lt.newList('ARRAY_LIST')
-    for pos in range(4):
+    for pos in range(1,4):
         track = lt.getElement(catalog['tracks'], pos)
         lt.addLast(t_3i, track)
 
@@ -101,7 +104,7 @@ def getFirstTracks(catalog):
 def getLastTracks(catalog):
     t_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['tracks'])
-    for pos in range(size-4, size):
+    for pos in range(size-2, size+1):
         track = lt.getElement(catalog['tracks'], pos)
         lt.addLast(t_3f, track)
 
@@ -109,7 +112,7 @@ def getLastTracks(catalog):
 
 def getFirstArtists(catalog):
     Ar_3i = lt.newList('ARRAY_LIST')
-    for pos in range(4):
+    for pos in range(1, 4):
         artist = lt.getElement(catalog['artists'], pos)
         lt.addLast(Ar_3i, artist)
 
@@ -118,7 +121,7 @@ def getFirstArtists(catalog):
 def getLastArtists(catalog):
     Ar_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['artists'])
-    for pos in range(size-4, size):
+    for pos in range(size-2, size+1):
         artist = lt.getElement(catalog['artists'], pos)
         lt.addLast(Ar_3f, artist)
 
@@ -126,7 +129,7 @@ def getLastArtists(catalog):
 
 def getFirstAlbums(catalog):
     Al_3i = lt.newList('ARRAY_LIST')
-    for pos in range(4):
+    for pos in range(1, 4):
         album = lt.getElement(catalog['albums'], pos)
         lt.addLast(Al_3i, album)
 
@@ -135,7 +138,7 @@ def getFirstAlbums(catalog):
 def getLastAlbums(catalog):
     Al_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['albums'])
-    for pos in range(size-4, size):
+    for pos in range(size-2, size+1):
         album = lt.getElement(catalog['albums'], pos)
         lt.addLast(Al_3f, album)
 
