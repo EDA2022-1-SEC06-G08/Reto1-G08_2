@@ -26,13 +26,14 @@ import model
 import sys
 import csv
 
-sys.maxsize
+csv.field_size_limit(sys.maxsize)
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de libros
+
 
 def newController():
     """
@@ -56,7 +57,7 @@ def loadData(control):
     tracks = loadTracks(catalog)
     artists = loadArtists(catalog)
     albums = loadAlbums(catalog)
-    
+
     tracks_3i = getFirstTracks(catalog)
     tracks_3f = getLastTracks(catalog)
 
@@ -66,7 +67,7 @@ def loadData(control):
     albums_3i = getFirstAlbums(catalog)
     albums_3f = getLastAlbums(catalog)
 
-    #sort(catalog)
+    # sort(catalog)
     return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
@@ -74,8 +75,9 @@ def loadTracks(catalog):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
-    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-10pct.csv'
-    input_file = csv.DictReader(open(tracksfile, encoding='utf-8'))
+    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-large.csv'
+    input_file = csv.DictReader(
+        open(tracksfile, encoding='utf-8'))
     for track in input_file:
         model.addTrack(catalog, track)
     return model.trackSize(catalog)
@@ -85,8 +87,9 @@ def loadArtists(catalog):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
-    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-10pct.csv'
-    input_file = csv.DictReader(open(artistfile, encoding='utf-8'))
+    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-large.csv'
+    input_file = csv.DictReader(
+        open(artistfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
     return model.artistSize(catalog)
@@ -96,8 +99,9 @@ def loadAlbums(catalog):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """
-    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-10pct.csv'
-    input_file = csv.DictReader(open(albumsfile, encoding='utf-8'))
+    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-large.csv'
+    input_file = csv.DictReader(
+        open(albumsfile, encoding='utf-8'))
     for album in input_file:
         model.addAlbum(catalog, album)
     return model.albumSize(catalog)
@@ -113,6 +117,7 @@ def sort(catalog):
     sortArtists(catalog)
     sortAlbums(catalog)
 
+
 def sortTracks(catalog):
     """
     Ordena las tracks mediante model.py
@@ -120,12 +125,14 @@ def sortTracks(catalog):
 
     model.sortTracks(catalog)
 
+
 def sortArtists(catalog):
     """
     Ordena los artistas mediante model.py
     """
 
     model.sortArtists(catalog)
+
 
 def sortAlbums(catalog):
     """
@@ -146,14 +153,16 @@ def getFirstTracks(catalog):
 
     return tracks
 
+
 def getLastTracks(catalog):
     """
     Obtiene los últimos 3 tracks de la lista de tracks
     """
 
     tracks = model.getLastTracks(catalog)
-    
+
     return tracks
+
 
 def getFirstArtists(catalog):
     """
@@ -164,6 +173,7 @@ def getFirstArtists(catalog):
 
     return artists
 
+
 def getLastArtists(catalog):
     """
     Obtiene los últimos 3 artistas de la lista de artistas
@@ -173,6 +183,7 @@ def getLastArtists(catalog):
 
     return artists
 
+
 def getFirstAlbums(catalog):
     """
     Obtiene los primeros 3 álbumes de la lista de álbumes
@@ -180,8 +191,8 @@ def getFirstAlbums(catalog):
 
     albums = model.getFirstAlbums(catalog)
 
-
     return albums
+
 
 def getLastAlbums(catalog):
     """
