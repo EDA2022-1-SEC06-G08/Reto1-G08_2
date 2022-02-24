@@ -30,7 +30,7 @@ import config as cf
 import sys
 import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sh, ins, se
+from DISClib.Algorithms.Sorting import shellsort as sh, insertionsort as ins, selectionsort as se
 assert cf
 
 maxInt = sys.maxsize
