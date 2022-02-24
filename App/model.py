@@ -27,11 +27,23 @@
 
 import config as cf
 import sys
+import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import shellsort as sh
+from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import selectionsort as se
 assert cf
+import csv
 
-sys.maxsize
+maxInt = sys.maxsize
+
+while True:
+
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt/10)
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -40,7 +52,7 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog():
+def newCatalog(artists_liststr):
     """
     Inicializa el catálogo. Crea una lista vacia para guardar
     todos los tracks, adicionalmente, crea una lista vacia para los artistas
@@ -51,11 +63,11 @@ def newCatalog():
                'artists': None,
                'albums': None}
 
-    catalog['tracks'] = lt.newList('ARRAY_LIST')
+    catalog['tracks'] = lt.newList()
                                     #cmpfunction = compareTracks)
-    catalog['artists'] = lt.newList('ARRAY_LIST')
+    catalog['artists'] = lt.newList(artists_liststr, cmpfunction = compareArtists)
                                     #cmpfunction=compareArtists)
-    catalog['albums'] = lt.newList('ARRAY_LIST')
+    catalog['albums'] = lt.newList()
                                     #cmpfunction=compareAlbums)
 
     return catalog
@@ -151,7 +163,17 @@ def getLastAlbums(catalog):
 
 
 
-#def compareArtists():
+def compareArtists(artist1, artist2):
+    """
+    Devuelve verdadero (True) si los 'followers' de artist1 son menores que los del artist2
+    Args:
+    artist1: informacion del primer artista que incluye su valor 'followers'
+    artist2: informacion del segundo artista que incluye su valor 'followers'
+    """
+    followers1 = int(float(artist1['followers']))
+    followers2 = int(float(artist2['followers']))
+
+    return followers1 < followers2
 
 
 
@@ -171,3 +193,47 @@ def getLastAlbums(catalog):
 
 #def sortAlbums():
 
+def selection_sort(catalog):
+    sub_list = catalog['artists']
+    start_time = getTime()
+    se.sort(sub_list, compareArtists)
+    end_time = getTime()
+    delta_time = deltaTime(start_time, end_time)
+
+    return delta_time
+
+def insertion_sort(catalog):
+    sub_list = catalog['artists']
+    start_time = getTime()
+    ins.sort(sub_list, compareArtists)
+    end_time = getTime()
+    delta_time = deltaTime(start_time, end_time)
+
+    return delta_time
+
+
+def shell_sort(catalog):
+    sub_list = catalog['artists']
+    start_time = getTime()
+    sh.sort(sub_list, compareArtists)
+    end_time = getTime()
+    delta_time = deltaTime(start_time, end_time)
+
+    return delta_time
+
+
+# Funciones para medir tiempos de ejecucion
+
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def deltaTime(start, end):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed

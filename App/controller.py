@@ -26,7 +26,15 @@ import model
 import sys
 import csv
 
-csv.field_size_limit(sys.maxsize)
+maxInt = sys.maxsize
+
+while True:
+
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt/10)
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -35,28 +43,28 @@ El controlador se encarga de mediar entre la vista y el modelo.
 # Inicialización del Catálogo de libros
 
 
-def newController():
+def newController(artists_liststr):
     """
     Crea una instancia del modelo
     """
     control = {
         'model': None
     }
-    control['model'] = model.newCatalog()
+    control['model'] = model.newCatalog(artists_liststr)
     return control
 
 
 # Funciones para la carga de datos
 
-def loadData(control):
+def loadData(filesize,control):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
     catalog = control['model']
-    tracks = loadTracks(catalog)
-    artists = loadArtists(catalog)
-    albums = loadAlbums(catalog)
+    tracks = loadTracks(catalog, filesize)
+    artists = loadArtists(catalog, filesize)
+    albums = loadAlbums(catalog, filesize)
 
     tracks_3i = getFirstTracks(catalog)
     tracks_3f = getLastTracks(catalog)
@@ -71,11 +79,11 @@ def loadData(control):
     return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
-def loadTracks(catalog):
+def loadTracks(catalog, filesize='large'):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
-    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-large.csv'
+    tracksfile = cf.data_dir + 'Spotify/spotify-tracks-utf8-' + filesize + '.csv'
     input_file = csv.DictReader(
         open(tracksfile, encoding='utf-8'))
     for track in input_file:
@@ -83,11 +91,11 @@ def loadTracks(catalog):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog):
+def loadArtists(catalog, filesize='large'):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
-    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-large.csv'
+    artistfile = cf.data_dir + 'Spotify/spotify-artists-utf8-' + filesize + '.csv'
     input_file = csv.DictReader(
         open(artistfile, encoding='utf-8'))
     for artist in input_file:
@@ -95,11 +103,11 @@ def loadArtists(catalog):
     return model.artistSize(catalog)
 
 
-def loadAlbums(catalog):
+def loadAlbums(catalog, filesize='large'):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """
-    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-large.csv'
+    albumsfile = cf.data_dir + 'Spotify/spotify-albums-utf8-' + filesize + '.csv'
     input_file = csv.DictReader(
         open(albumsfile, encoding='utf-8'))
     for album in input_file:
@@ -202,3 +210,21 @@ def getLastAlbums(catalog):
     albums = model.getLastAlbums(catalog)
 
     return albums
+
+
+
+
+def selection_sort(catalog):
+    time = model.selection_sort(catalog['model'])
+
+    return time
+
+def insertion_sort(catalog):
+    time = model.insertion_sort(catalog['model'])
+
+    return time
+
+def shell_sort(catalog):
+    time = model.shell_sort(catalog['model'])
+
+    return time

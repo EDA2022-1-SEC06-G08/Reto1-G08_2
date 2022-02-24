@@ -26,7 +26,16 @@ import csv
 import controller
 from DISClib.ADT import list as lt
 assert cf
-csv.field_size_limit(sys.maxsize)
+
+maxInt = sys.maxsize
+
+while True:
+
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt/10)
 
 """
 La vista se encarga de la interacción con el usuario
@@ -38,26 +47,22 @@ operación solicitada
 # Crear controlador
 
 
-def newController():
+def newController(artists_liststr):
     """
     Se crea una instancia del controlador
     """
-    control = controller.newController()
+    control = controller.newController(artists_liststr)
     return control
-
-
-# Se crea el controlador asociado a la vista
-control = newController()
 
 
 # Cargar
 
-def loadData():
+def loadData(filesize):
     """
     Solicita al controlador que cargue los datos en el modelo
     """
     num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = controller.loadData(
-        control)
+        filesize,control)
     return num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
@@ -150,9 +155,14 @@ def printAlbums(num, Al_3i, Al_3f):
 # Interfaz
 
 def printMenu():
-    print("Bienvenido")
+    print("\nBienvenido")
+    print("0- Seleccionar el tipo de representación de la lista")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Encontrar los artistas más populares")
+    print("3- Clasificar las canciones por popularidad")
+    print("4- Encontrar la canción más popular de un artista")
+    print("5- Encontrar la discografía de un artista")
+    print("6- Ordenar la lista de artistas\n")
 
 
 """
@@ -162,10 +172,17 @@ while True:
     printMenu()
     inputs = input(
         'Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    
+    if int(inputs[0]) == 0:
+        artists_listsrt = input("Estructura de datos para artists: ")
+        filesize = input("Archivo que se leerá (sufijo de tamaño): ")
+        
+    elif int(inputs[0]) == 1:
+        # Se crea el controlador asociado a la vista
+        control = newController(artists_listsrt)
         print(
-            "Cargando información de los archivos ....")
-        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData()
+            "Cargando información de los archivos ....\n")
+        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(filesize)
         printTracks(num_tracks, tracks_3i, tracks_3f)
         print("\n." * 10 + "\n")
         printArtists(
@@ -175,9 +192,22 @@ while True:
         print("\n." * 10 + "\n")
         printAlbums(num_albums, albums_3i, albums_3f)
 
-    elif int(inputs[0]) == 2:
-        pass
+    elif int(inputs[0]) == 6:
+        sort_type = input("¿Qué tipo de ordenamiento desea usar (selection, insertion o shell)? ")
+        if sort_type == 'selection':
+            time = controller.selection_sort(control)
+            print('Por favor espere . . .')
+            print(time + ' ms')
+        elif sort_type == 'insertion':
+            time = controller.insertion_sort(control)
+            print('Por favor espere . . .')
+            print(time + ' ms')
+        elif sort_type == 'shell':
+            time = controller.shell_sort(control)
+            print('Por favor espere . . .')
+            print(time + ' ms')
+        else:
+            print('Por favor seleccione una opción válida')
 
     else:
         sys.exit(0)
-sys.exit(0)
