@@ -25,15 +25,13 @@
  """
 
 
+import csv
 import config as cf
 import sys
 import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sh
-from DISClib.Algorithms.Sorting import insertionsort as ins
-from DISClib.Algorithms.Sorting import selectionsort as se
+from DISClib.Algorithms.Sorting import shellsort as sh, ins, se
 assert cf
-import csv
 
 maxInt = sys.maxsize
 
@@ -43,7 +41,7 @@ while True:
         csv.field_size_limit(maxInt)
         break
     except OverflowError:
-        maxInt = int(maxInt/10)
+        maxInt = int(maxInt / 10)
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -51,6 +49,7 @@ los mismos.
 """
 
 # Construccion de modelos
+
 
 def newCatalog(artists_liststr):
     """
@@ -64,11 +63,12 @@ def newCatalog(artists_liststr):
                'albums': None}
 
     catalog['tracks'] = lt.newList()
-                                    #cmpfunction = compareTracks)
-    catalog['artists'] = lt.newList(artists_liststr, cmpfunction = compareArtists)
-                                    #cmpfunction=compareArtists)
+    # cmpfunction = compareTracks)
+    catalog['artists'] = lt.newList(
+        artists_liststr, cmpfunction=compareArtists)
+    # cmpfunction=compareArtists)
     catalog['albums'] = lt.newList()
-                                    #cmpfunction=compareAlbums)
+    # cmpfunction=compareAlbums)
 
     return catalog
 
@@ -80,10 +80,12 @@ def addTrack(catalog, track):
     lt.addLast(catalog['tracks'], track)
     return catalog
 
+
 def addArtist(catalog, artist):
     # Se adiciona el artista a la lista de artistas
     lt.addLast(catalog['artists'], artist)
     return catalog
+
 
 def addAlbum(catalog, album):
     # Se adiciona el album a la lista de álbumes
@@ -96,8 +98,10 @@ def addAlbum(catalog, album):
 def trackSize(catalog):
     return lt.size(catalog['tracks'])
 
+
 def artistSize(catalog):
     return lt.size(catalog['artists'])
+
 
 def albumSize(catalog):
     return lt.size(catalog['albums'])
@@ -107,37 +111,43 @@ def albumSize(catalog):
 
 def getFirstTracks(catalog):
     t_3i = lt.newList('ARRAY_LIST')
-    for pos in range(1,4):
+    for pos in range(1, 4):
         track = lt.getElement(catalog['tracks'], pos)
         lt.addLast(t_3i, track)
 
     return t_3i
 
+
 def getLastTracks(catalog):
     t_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['tracks'])
-    for pos in range(size-2, size+1):
+    for pos in range(size - 2, size + 1):
         track = lt.getElement(catalog['tracks'], pos)
         lt.addLast(t_3f, track)
 
     return t_3f
 
+
 def getFirstArtists(catalog):
     Ar_3i = lt.newList('ARRAY_LIST')
     for pos in range(1, 4):
-        artist = lt.getElement(catalog['artists'], pos)
+        artist = lt.getElement(
+            catalog['artists'], pos)
         lt.addLast(Ar_3i, artist)
 
     return Ar_3i
 
+
 def getLastArtists(catalog):
     Ar_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['artists'])
-    for pos in range(size-2, size+1):
-        artist = lt.getElement(catalog['artists'], pos)
+    for pos in range(size - 2, size + 1):
+        artist = lt.getElement(
+            catalog['artists'], pos)
         lt.addLast(Ar_3f, artist)
 
     return Ar_3f
+
 
 def getFirstAlbums(catalog):
     Al_3i = lt.newList('ARRAY_LIST')
@@ -147,20 +157,21 @@ def getFirstAlbums(catalog):
 
     return Al_3i
 
+
 def getLastAlbums(catalog):
     Al_3f = lt.newList('ARRAY_LIST')
     size = lt.size(catalog['albums'])
-    for pos in range(size-2, size+1):
+    for pos in range(size - 2, size + 1):
         album = lt.getElement(catalog['albums'], pos)
         lt.addLast(Al_3f, album)
 
     return Al_3f
 
 
-# Funciones utilizadas para comparar elementos dentro de una lista
+# Funciones utilizadas para comparar elementos dentro
+# de una lista
 
-#def compareTracks():
-
+# def compareTracks():
 
 
 def compareArtists(artist1, artist2):
@@ -176,22 +187,18 @@ def compareArtists(artist1, artist2):
     return followers1 < followers2
 
 
-
-#def compareAlbums():
-
+# def compareAlbums():
 
 
 # Funciones de ordenamiento
 
-#def sortTracks():
+# def sortTracks():
 
 
-
-#def sortArtists():
-    
+# def sortArtists():
 
 
-#def sortAlbums():
+# def sortAlbums():
 
 def selection_sort(catalog):
     sub_list = catalog['artists']
@@ -201,6 +208,7 @@ def selection_sort(catalog):
     delta_time = deltaTime(start_time, end_time)
 
     return delta_time
+
 
 def insertion_sort(catalog):
     sub_list = catalog['artists']
@@ -228,7 +236,7 @@ def getTime():
     """
     devuelve el instante tiempo de procesamiento en milisegundos
     """
-    return float(time.perf_counter()*1000)
+    return float(time.perf_counter() * 1000)
 
 
 def deltaTime(start, end):

@@ -34,7 +34,7 @@ while True:
         csv.field_size_limit(maxInt)
         break
     except OverflowError:
-        maxInt = int(maxInt/10)
+        maxInt = int(maxInt / 10)
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -50,13 +50,14 @@ def newController(artists_liststr):
     control = {
         'model': None
     }
-    control['model'] = model.newCatalog(artists_liststr)
+    control['model'] = model.newCatalog(
+        artists_liststr)
     return control
 
 
 # Funciones para la carga de datos
 
-def loadData(filesize,control):
+def loadData(filesize, control):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
@@ -212,17 +213,17 @@ def getLastAlbums(catalog):
     return albums
 
 
-
-
 def selection_sort(catalog):
     time = model.selection_sort(catalog['model'])
 
     return time
 
+
 def insertion_sort(catalog):
     time = model.insertion_sort(catalog['model'])
 
     return time
+
 
 def shell_sort(catalog):
     time = model.shell_sort(catalog['model'])
