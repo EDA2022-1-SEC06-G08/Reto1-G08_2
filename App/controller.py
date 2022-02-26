@@ -229,3 +229,13 @@ def shell_sort(catalog):
     time = model.shell_sort(catalog['model'])
 
     return time
+
+def merge_sort(catalog):
+    time = model.merge_sort(catalog['model'])
+
+    return time
+
+def quick_sort(catalog):
+    time = model.quick_sort(catalog['model'])
+
+    return time

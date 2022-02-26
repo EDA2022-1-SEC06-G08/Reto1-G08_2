@@ -30,7 +30,7 @@ import config as cf
 import sys
 import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sh, insertionsort as ins, selectionsort as se
+from DISClib.Algorithms.Sorting import shellsort as sh, insertionsort as ins, selectionsort as se, mergesort as me, quicksort as qu
 assert cf
 
 maxInt = sys.maxsize
@@ -229,6 +229,23 @@ def shell_sort(catalog):
 
     return delta_time
 
+def merge_sort(catalog):
+    sub_list = catalog['artists']
+    start_time = getTime()
+    me.sort(sub_list, compareArtists)
+    end_time = getTime()
+    delta_time = deltaTime(start_time, end_time)
+
+    return delta_time
+
+def quick_sort(catalog):
+    sub_list = catalog['artists']
+    start_time = getTime()
+    qu.sort(sub_list, compareArtists)
+    end_time = getTime()
+    delta_time = deltaTime(start_time, end_time)
+
+    return delta_time
 
 # Funciones para medir tiempos de ejecucion
 

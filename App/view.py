@@ -200,7 +200,7 @@ while True:
 
     elif int(inputs[0]) == 6:
         sort_type = input(
-            "¿Qué tipo de ordenamiento desea usar (selection, insertion o shell)? ")
+            "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quicksort)? ")
         if sort_type == 'selection':
             print('Por favor espere . . .')
             time = controller.selection_sort(control)
@@ -212,6 +212,14 @@ while True:
         elif sort_type == 'shell':
             print('Por favor espere . . .')
             time = controller.shell_sort(control)
+            print(str(round(time, 2)) + ' ms')
+        elif sort_type == 'merge':
+            print('Por favor espere . . .')
+            time = controller.merge_sort(control)
+            print(str(round(time, 2)) + ' ms')
+        elif sort_type == 'quicksort':
+            print('Por favor espere . . .')
+            time = controller.quick_sort(control)
             print(str(round(time, 2)) + ' ms')
         else:
             print(
