@@ -212,30 +212,7 @@ def getLastAlbums(catalog):
 
     return albums
 
-
-def selection_sort(catalog):
-    time = model.selection_sort(catalog['model'])
-
-    return time
-
-
-def insertion_sort(catalog):
-    time = model.insertion_sort(catalog['model'])
-
-    return time
-
-
-def shell_sort(catalog):
-    time = model.shell_sort(catalog['model'])
-
-    return time
-
-def merge_sort(catalog):
-    time = model.merge_sort(catalog['model'])
-
-    return time
-
-def quick_sort(catalog):
-    time = model.quick_sort(catalog['model'])
-
+def sort(sort_type, catalog):
+    time = model.sort(sort_type, catalog["model"])
+    
     return time

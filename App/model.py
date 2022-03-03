@@ -30,7 +30,13 @@ import config as cf
 import sys
 import time
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sh, insertionsort as ins, selectionsort as se, mergesort as me, quicksort as qu
+from DISClib.Algorithms.Sorting import (
+    shellsort as sh,
+    insertionsort as ins,
+    selectionsort as se,
+    mergesort as me,
+    quicksort as qu
+)
 assert cf
 
 maxInt = sys.maxsize
@@ -199,55 +205,28 @@ def compareArtists(artist1, artist2):
 
 
 # def sortAlbums():
-
-def selection_sort(catalog):
+def sort(sort_type, catalog):
     sub_list = catalog['artists']
     start_time = getTime()
-    se.sort(sub_list, compareArtists)
-    end_time = getTime()
-    delta_time = deltaTime(start_time, end_time)
-
-    return delta_time
-
-
-def insertion_sort(catalog):
-    sub_list = catalog['artists']
-    start_time = getTime()
-    ins.sort(sub_list, compareArtists)
-    end_time = getTime()
-    delta_time = deltaTime(start_time, end_time)
-
-    return delta_time
-
-
-def shell_sort(catalog):
-    sub_list = catalog['artists']
-    start_time = getTime()
-    sh.sort(sub_list, compareArtists)
-    end_time = getTime()
-    delta_time = deltaTime(start_time, end_time)
-
-    return delta_time
-
-def merge_sort(catalog):
-    sub_list = catalog['artists']
-    start_time = getTime()
-    me.sort(sub_list, compareArtists)
-    end_time = getTime()
-    delta_time = deltaTime(start_time, end_time)
-
-    return delta_time
-
-def quick_sort(catalog):
-    sub_list = catalog['artists']
-    start_time = getTime()
-    qu.sort(sub_list, compareArtists)
+    if sort_type == "selection":
+        se.sort(sub_list, compareArtists)
+    elif sort_type == "insertion":
+        ins.sort(sub_list, compareArtists)
+    elif sort_type == "shell":
+        sh.sort(sub_list, compareArtists)
+    elif sort_type == "merge":
+        me.sort(sub_list, compareArtists)
+    elif sort_type == "quick":
+        qu.sort(sub_list, compareArtists)
+    else:
+        return None
     end_time = getTime()
     delta_time = deltaTime(start_time, end_time)
 
     return delta_time
 
 # Funciones para medir tiempos de ejecucion
+
 
 def getTime():
     """
