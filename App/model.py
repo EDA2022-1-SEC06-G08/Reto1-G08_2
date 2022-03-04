@@ -205,7 +205,7 @@ def compareArtists(artist1, artist2):
 
 
 # def sortAlbums():
-def sort(sort_type, catalog):
+def sortBy(sort_type, catalog):
     sub_list = catalog['artists']
     start_time = getTime()
     if sort_type == "selection":

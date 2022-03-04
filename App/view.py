@@ -202,7 +202,7 @@ while True:
         sort_type = input(
             "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")
         print('Por favor espere . . .')
-        time = controller.sort(sort_type, control)
+        time = controller.sortBy(sort_type, control)
         if bool(time):
             print(str(round(time, 2)) + ' ms')
         else:

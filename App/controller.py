@@ -212,7 +212,8 @@ def getLastAlbums(catalog):
 
     return albums
 
-def sort(sort_type, catalog):
-    time = model.sort(sort_type, catalog["model"])
-    
+
+def sortBy(sort_type, catalog):
+    time = model.sortBy(sort_type, catalog["model"])
+
     return time
