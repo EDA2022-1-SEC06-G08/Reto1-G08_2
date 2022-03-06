@@ -43,7 +43,10 @@ El controlador se encarga de mediar entre la vista y el modelo.
 # Inicialización del Catálogo de libros
 
 
-def newController(artists_liststr):
+def newController(
+        artists_liststr,
+        tracks_liststr,
+        album_liststr):
     """
     Crea una instancia del modelo
     """
@@ -51,7 +54,7 @@ def newController(artists_liststr):
         'model': None
     }
     control['model'] = model.newCatalog(
-        artists_liststr)
+        artists_liststr, tracks_liststr, album_liststr)
     return control
 
 
@@ -63,21 +66,22 @@ def loadData(filesize, control):
     estructura de datos
     """
     catalog = control['model']
-    tracks = loadTracks(catalog, filesize)
-    artists = loadArtists(catalog, filesize)
-    albums = loadAlbums(catalog, filesize)
+    datos = {
+        "num_tracks": loadTracks(catalog, filesize),
+        "num_artists": loadArtists(catalog, filesize),
+        "num_albums": loadAlbums(catalog, filesize),
 
-    tracks_3i = getFirstTracks(catalog)
-    tracks_3f = getLastTracks(catalog)
+        "tracks_3i": getFirstTracks(catalog),
+        "tracks_3f": getLastTracks(catalog),
 
-    artists_3i = getFirstArtists(catalog)
-    artists_3f = getLastArtists(catalog)
+        "artists_3i": getFirstArtists(catalog),
+        "artists_3f": getLastArtists(catalog),
 
-    albums_3i = getFirstAlbums(catalog)
-    albums_3f = getLastAlbums(catalog)
+        "albums_3i": getFirstAlbums(catalog),
+        "albums_3f": getLastAlbums(catalog)
 
-    # sort(catalog)
-    return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
+    }
+    return datos
 
 
 def loadTracks(catalog, filesize='large'):
@@ -88,7 +92,8 @@ def loadTracks(catalog, filesize='large'):
     input_file = csv.DictReader(
         open(tracksfile, encoding='utf-8'))
     for track in input_file:
-        model.addTrack(catalog, track)
+        if track["id"] != "-1":
+            model.addTrack(catalog, track)
     return model.trackSize(catalog)
 
 
@@ -132,7 +137,7 @@ def sortTracks(catalog):
     Ordena las tracks mediante model.py
     """
 
-    model.sortTracks(catalog)
+    model.sortTracks(catalog["model"])
 
 
 def sortArtists(catalog):

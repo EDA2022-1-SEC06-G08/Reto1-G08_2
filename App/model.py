@@ -57,7 +57,10 @@ los mismos.
 # Construccion de modelos
 
 
-def newCatalog(artists_liststr):
+def newCatalog(
+        artists_liststr,
+        tracks_liststr,
+        album_liststr):
     """
     Inicializa el catálogo. Crea una lista vacia para guardar
     todos los tracks, adicionalmente, crea una lista vacia para los artistas
@@ -68,8 +71,8 @@ def newCatalog(artists_liststr):
                'artists': None,
                'albums': None}
 
-    catalog['tracks'] = lt.newList()
-    # cmpfunction = compareTracks)
+    catalog['tracks'] = lt.newList(
+        tracks_liststr, cmpfunction=compareTracks)
     catalog['artists'] = lt.newList(
         artists_liststr, cmpfunction=compareArtists)
     # cmpfunction=compareArtists)
@@ -177,10 +180,27 @@ def getLastAlbums(catalog):
 # Funciones utilizadas para comparar elementos dentro
 # de una lista
 
-# def compareTracks():
+def compareTracks(track1, track2,):
+    """
+        Devuelve verdadero (True) si la 'popularity' del track1 es mayor que la del track2
+        Args:
+        track1: informacion del primer track que incluye su valor 'popularity'
+        track2: informacion del segundo track que incluye su valor 'popularity'
+    """
+
+    toRank = ["popularity", "duration_ms", ]
+
+    for x in toRank:
+        if track1[x] != track2[x]:
+            return int(
+                float(track1[x])) > int(
+                float(track2[x]))
+    # no podemos pasar el nombre a sun float, por lo
+    # que hacemos esto en vez al final
+    return track1["name"] > track2["name"]
 
 
-def compareArtists(artist1, artist2):
+def compareArtists(artist1, artist2,):
     """
     Devuelve verdadero (True) si los 'followers' de artist1 son menores que los del artist2
     Args:
@@ -198,7 +218,9 @@ def compareArtists(artist1, artist2):
 
 # Funciones de ordenamiento
 
-# def sortTracks():
+def sortTracks(catalog):
+    sub_list = catalog["tracks"]
+    me.sort(sub_list, compareTracks)
 
 
 # def sortArtists():
