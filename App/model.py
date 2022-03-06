@@ -111,73 +111,40 @@ def artistSize(catalog):
 def albumSize(catalog):
     return lt.size(catalog['albums'])
 
+def rankingArtistas(artists, N):
+    sublista = lt.subList(artists, 1, N)
+    ai = getFirst(sublista)
+    af = getLast(sublista)
+
+    return ai, af, sublista
 
 # Funciones de consulta
 
-def getFirstTracks(catalog):
+def getFirst(list):
     t_3i = lt.newList('ARRAY_LIST')
     for pos in range(1, 4):
-        track = lt.getElement(catalog['tracks'], pos)
-        lt.addLast(t_3i, track)
+        elem = lt.getElement(list, pos)
+        lt.addLast(t_3i, elem)
 
     return t_3i
 
-
-def getLastTracks(catalog):
+def getLast(list):
     t_3f = lt.newList('ARRAY_LIST')
-    size = lt.size(catalog['tracks'])
+    size = lt.size(list)
     for pos in range(size - 2, size + 1):
-        track = lt.getElement(catalog['tracks'], pos)
-        lt.addLast(t_3f, track)
+        elem = lt.getElement(list, pos)
+        lt.addLast(t_3f, elem)
 
     return t_3f
 
 
-def getFirstArtists(catalog):
-    Ar_3i = lt.newList('ARRAY_LIST')
-    for pos in range(1, 4):
-        artist = lt.getElement(
-            catalog['artists'], pos)
-        lt.addLast(Ar_3i, artist)
+# Funciones utilizadas para comparar elementos en un ordenamiento
 
-    return Ar_3i
-
-
-def getLastArtists(catalog):
-    Ar_3f = lt.newList('ARRAY_LIST')
-    size = lt.size(catalog['artists'])
-    for pos in range(size - 2, size + 1):
-        artist = lt.getElement(
-            catalog['artists'], pos)
-        lt.addLast(Ar_3f, artist)
-
-    return Ar_3f
-
-
-def getFirstAlbums(catalog):
-    Al_3i = lt.newList('ARRAY_LIST')
-    for pos in range(1, 4):
-        album = lt.getElement(catalog['albums'], pos)
-        lt.addLast(Al_3i, album)
-
-    return Al_3i
-
-
-def getLastAlbums(catalog):
-    Al_3f = lt.newList('ARRAY_LIST')
-    size = lt.size(catalog['albums'])
-    for pos in range(size - 2, size + 1):
-        album = lt.getElement(catalog['albums'], pos)
-        lt.addLast(Al_3f, album)
-
-    return Al_3f
-
-
-# Funciones utilizadas para comparar elementos dentro
-# de una lista
 
 # def compareTracks():
 
+def compareArtists2(art1, art2):
+    return int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
 
 def compareArtists(artist1, artist2):
     """
@@ -237,7 +204,7 @@ def compareName(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene un nombre primero en el alfabeto, 0 si son iguales y -1 de lo contrario
     """
-    comp = (art1['name']) < (art2['name'])
+    comp = (str(art1['name']).lower()) < (str(art2['name']).lower())
     if comp == True:
         return 1
     elif (art1['name']) == (art2['name']):
@@ -254,47 +221,5 @@ def compareName(art1, art2):
 
 # def sortAlbums():
 
-
-def sortBy(sort_type, catalog, library):
-    if library == "artists":
-        sub_list = catalog['artists']
-        cmpf = compareArtists
-    if library == "tracks":
-        sub_list = catalog['tracks']
-    else:    
-        sub_list = catalog['albums']
-    
-    #start_time = getTime()
-    if sort_type == "selection":
-        se.sort(sub_list, cmpf)
-    elif sort_type == "insertion":
-        ins.sort(sub_list, cmpf)
-    elif sort_type == "shell":
-        sh.sort(sub_list, cmpf)
-    elif sort_type == "merge":
-        me.sort(sub_list, cmpf)
-    elif sort_type == "quick":
-        qu.sort(sub_list, cmpf)
-    else:
-        return None
-    #end_time = getTime()
-    #delta_time = deltaTime(start_time, end_time)
-
-    #return delta_time
-
-
-# Funciones para medir tiempos de ejecucion
-
-def getTime():
-    """
-    devuelve el instante tiempo de procesamiento en milisegundos
-    """
-    return float(time.perf_counter() * 1000)
-
-
-def deltaTime(start, end):
-    """
-    devuelve la diferencia entre tiempos de procesamiento muestreados
-    """
-    elapsed = float(end - start)
-    return elapsed
+def sortArtists(catalog):
+    me.sort(catalog['artists'],compareArtists)
