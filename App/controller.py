@@ -43,21 +43,20 @@ El controlador se encarga de mediar entre la vista y el modelo.
 # Inicialización del Catálogo de libros
 
 
-def newController(artists_liststr):
+def newController():
     """
     Crea una instancia del modelo
     """
     control = {
         'model': None
     }
-    control['model'] = model.newCatalog(
-        artists_liststr)
+    control['model'] = model.newCatalog()
     return control
 
 
 # Funciones para la carga de datos
 
-def loadData(filesize, control):
+def loadData(control, filesize = 'large'):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
@@ -80,7 +79,7 @@ def loadData(filesize, control):
     return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
-def loadTracks(catalog, filesize='large'):
+def loadTracks(catalog, filesize):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -101,6 +100,7 @@ def loadArtists(catalog, filesize='large'):
         open(artistfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
+    sortBy("merge",catalog,"artists")
     return model.artistSize(catalog)
 
 
@@ -118,38 +118,8 @@ def loadAlbums(catalog, filesize='large'):
 
 # Funciones de ordenamiento
 
-def sort(catalog):
-    """
-    Llama a otras funciones para ordenar el catalog entero
-    """
-    sortTracks(catalog)
-    sortArtists(catalog)
-    sortAlbums(catalog)
-
-
-def sortTracks(catalog):
-    """
-    Ordena las tracks mediante model.py
-    """
-
-    model.sortTracks(catalog)
-
-
-def sortArtists(catalog):
-    """
-    Ordena los artistas mediante model.py
-    """
-
-    model.sortArtists(catalog)
-
-
-def sortAlbums(catalog):
-    """
-    Ordena los álbumes mediante model.py
-    """
-
-    model.sortAlbums(catalog)
-
+def sortBy(sort_type, catalog, library):
+    model.sortBy(sort_type, catalog, library)
 
 # Funciones de consulta sobre el catálogo
 
@@ -211,9 +181,3 @@ def getLastAlbums(catalog):
     albums = model.getLastAlbums(catalog)
 
     return albums
-
-
-def sortBy(sort_type, catalog):
-    time = model.sortBy(sort_type, catalog["model"])
-
-    return time

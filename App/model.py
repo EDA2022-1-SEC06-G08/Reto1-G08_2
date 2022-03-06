@@ -57,7 +57,7 @@ los mismos.
 # Construccion de modelos
 
 
-def newCatalog(artists_liststr):
+def newCatalog():
     """
     Inicializa el catálogo. Crea una lista vacia para guardar
     todos los tracks, adicionalmente, crea una lista vacia para los artistas
@@ -68,12 +68,11 @@ def newCatalog(artists_liststr):
                'artists': None,
                'albums': None}
 
-    catalog['tracks'] = lt.newList()
+    catalog['tracks'] = lt.newList("ARRAY_LIST")
     # cmpfunction = compareTracks)
-    catalog['artists'] = lt.newList(
-        artists_liststr, cmpfunction=compareArtists)
+    catalog['artists'] = lt.newList('ARRAY_LIST')
     # cmpfunction=compareArtists)
-    catalog['albums'] = lt.newList()
+    catalog['albums'] = lt.newList('ARRAY_LIST')
     # cmpfunction=compareAlbums)
 
     return catalog
@@ -182,16 +181,69 @@ def getLastAlbums(catalog):
 
 def compareArtists(artist1, artist2):
     """
-    Devuelve verdadero (True) si los 'followers' de artist1 son menores que los del artist2
+    Devuelve verdadero (True) si artist1 es más popular (o en su defecto, tiene más followers o su nombre
+    es primero alfabéticamente) que artist2
     Args:
     artist1: informacion del primer artista que incluye su valor 'followers'
     artist2: informacion del segundo artista que incluye su valor 'followers'
     """
-    followers1 = int(float(artist1['followers']))
-    followers2 = int(float(artist2['followers']))
+    value_p = comparePopularity(artist1, artist2)
+    if value_p != 0:
+        if value_p == 1:
+            return True
+        else:
+            return False
+    value_f = compareFollowers(artist1, artist2)
+    if value_f != 0:
+        if value_f == 1:
+            return True
+        else:
+            return False
+    value_n = compareName(artist1, artist2)
+    if value_n != 0:
+        if value_f == 1:
+            return True
+        else:
+            return False
+    else:
+        return True
+        
 
-    return followers1 < followers2
+def comparePopularity(art1, art2):
+    """
+    Devuelve 1 si el artista 1 tiene más popularidad, 0 si son iguales y -1 de lo contrario
+    """
+    comp = int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
+    if comp == True:
+        return 1
+    elif int(float(art1['artist_popularity'])) == int(float(art2['artist_popularity'])):
+        return 0
+    else:
+        return -1
 
+def compareFollowers(art1, art2):
+    """
+    Devuelve 1 si el artista 1 tiene más seguidores, 0 si son iguales y -1 de lo contrario
+    """
+    comp = int(float(art1['followers'])) > int(float(art2['followers']))
+    if comp == True:
+        return 1
+    elif int(float(art1['followers'])) == int(float(art2['followers'])):
+        return 0
+    else:
+        return -1
+
+def compareName(art1, art2):
+    """
+    Devuelve 1 si el artista 1 tiene un nombre primero en el alfabeto, 0 si son iguales y -1 de lo contrario
+    """
+    comp = (art1['name']) < (art2['name'])
+    if comp == True:
+        return 1
+    elif (art1['name']) == (art2['name']):
+        return 0
+    else:
+        return -1
 
 # def compareAlbums():
 
@@ -200,33 +252,38 @@ def compareArtists(artist1, artist2):
 
 # def sortTracks():
 
-
-# def sortArtists():
-
-
 # def sortAlbums():
-def sortBy(sort_type, catalog):
-    sub_list = catalog['artists']
-    start_time = getTime()
+
+
+def sortBy(sort_type, catalog, library):
+    if library == "artists":
+        sub_list = catalog['artists']
+        cmpf = compareArtists
+    if library == "tracks":
+        sub_list = catalog['tracks']
+    else:    
+        sub_list = catalog['albums']
+    
+    #start_time = getTime()
     if sort_type == "selection":
-        se.sort(sub_list, compareArtists)
+        se.sort(sub_list, cmpf)
     elif sort_type == "insertion":
-        ins.sort(sub_list, compareArtists)
+        ins.sort(sub_list, cmpf)
     elif sort_type == "shell":
-        sh.sort(sub_list, compareArtists)
+        sh.sort(sub_list, cmpf)
     elif sort_type == "merge":
-        me.sort(sub_list, compareArtists)
+        me.sort(sub_list, cmpf)
     elif sort_type == "quick":
-        qu.sort(sub_list, compareArtists)
+        qu.sort(sub_list, cmpf)
     else:
         return None
-    end_time = getTime()
-    delta_time = deltaTime(start_time, end_time)
+    #end_time = getTime()
+    #delta_time = deltaTime(start_time, end_time)
 
-    return delta_time
+    #return delta_time
+
 
 # Funciones para medir tiempos de ejecucion
-
 
 def getTime():
     """
