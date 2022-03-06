@@ -43,10 +43,7 @@ El controlador se encarga de mediar entre la vista y el modelo.
 # Inicialización del Catálogo de libros
 
 
-def newController(
-        artists_liststr,
-        tracks_liststr,
-        album_liststr):
+def newController():
     """
     Crea una instancia del modelo
     """
@@ -75,12 +72,12 @@ def loadData(control, filesize='large'):
         "num_albums": loadAlbums(
             catalog,
             filesize),
-        "tracks_3i": getFirst(catalog),
-        "tracks_3f": getLast(catalog),
-        "artists_3i": getFirst(catalog),
-        "artists_3f": getLast(catalog),
-        "albums_3i": getFirst(catalog),
-        "albums_3f": getLast(catalog)}
+        "tracks_3i": getFirst(catalog["tracks"]),
+        "tracks_3f": getLast(catalog["tracks"]),
+        "artists_3i": getFirst(catalog["artists"]),
+        "artists_3f": getLast(catalog["artists"]),
+        "albums_3i": getFirst(catalog["albums"]),
+        "albums_3f": getLast(catalog["albums"])}
     return datos
 
 

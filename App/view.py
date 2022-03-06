@@ -52,11 +52,11 @@ operación solicitada
 # Cargar
 
 
-def loadData(control):
+def loadData(control, filesize):
     """
     Solicita al controlador que cargue los datos en el modelo
     """
-    datos = controller.loadData(filesize, control)
+    datos = controller.loadData(control, filesize)
     return datos
 
 
@@ -212,7 +212,7 @@ def printMenu():
     print(
         "0- Seleccionar el tipo de representación de la lista")
     print("1- Cargar información en el catálogo")
-    # print("2- Encontrar los artistas más populares")
+    print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
     # print(
     #     "4- Encontrar la canción más popular de un artista")
@@ -228,22 +228,15 @@ while True:
         'Seleccione una opción para continuar\n')
 
     if int(inputs[0]) == 0:
-        artists_liststr = input(
-            "Estructura de datos para artists: ")
-        tracks_liststr = input(
-            "Estructura de datos para tracks: ")
-        album_liststr = input(
-            "Estructura de datos para albumes: ")
         filesize = input(
             "Archivo que se leerá (sufijo de tamaño): ")
 
     elif int(inputs[0]) == 1:
         # Se crea el controlador asociado a la vista
-        control = controller.newController(
-            artists_liststr, tracks_liststr, album_liststr)
+        control = controller.newController()
         print(
             "Cargando información de los archivos ....")
-        datos = loadData(filesize)
+        datos = loadData(control, filesize)
         report = input(
             "Desea imprimir del reporte de datos? (y/n) ")
         if report.lower() == "y":

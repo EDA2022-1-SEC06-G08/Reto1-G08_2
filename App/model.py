@@ -28,7 +28,6 @@
 import csv
 import config as cf
 import sys
-import time
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import (
     shellsort as sh,
