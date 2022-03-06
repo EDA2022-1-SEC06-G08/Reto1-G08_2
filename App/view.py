@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+
 import config as cf
 import sys
 import csv
@@ -48,23 +49,15 @@ operación solicitada
 
 # Se crea el controlador asociado a la vista
 
-def newController():
-    """
-    Se crea una instancia del controlador
-    """
-    control = controller.newController()
-    return control
-
-control = newController()
-
 # Cargar
+
 
 def loadData(control):
     """
     Solicita al controlador que cargue los datos en el modelo
     """
-    num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = controller.loadData(control)
-    return num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
+    datos = controller.loadData(filesize, control)
+    return datos
 
 
 # Funciones de impresión
@@ -152,17 +145,26 @@ def printAlbums(num, Al_3i, Al_3f):
             '\nFecha de lanzamiento: ' +
             album['release_date'])
 
+
 def printRanking(ai, af, lista, N):
     i = 1
     size = lt.size(lista)
-    print("Primeros " + str(N) + " artistas por popularidad:\n")
+    print(
+        "Primeros " +
+        str(N) +
+        " artistas por popularidad:\n")
     for artist in lt.iterator(ai):
         print(
-            str(i) + "." +
-            '\nNombre: ' + artist['name'] +
-            '\nGéneros: ' + artist['genres'] +
-            '\nPopularidad: ' + artist['artist_popularity'] +
-            '\nNúmero de seguidores: ' + artist['followers'])
+            str(i) +
+            "." +
+            '\nNombre: ' +
+            artist['name'] +
+            '\nGéneros: ' +
+            artist['genres'] +
+            '\nPopularidad: ' +
+            artist['artist_popularity'] +
+            '\nNúmero de seguidores: ' +
+            artist['followers'])
         i += 1
     print(".")
     for pos in range(4, size - 2):
@@ -173,21 +175,45 @@ def printRanking(ai, af, lista, N):
     print(".")
     for artist in lt.iterator(af):
         print(
-            str(i) + "." +
-            '\nNombre: ' + artist['name'] +
-            '\nGéneros: ' + artist['genres'] +
-            '\nPopularidad: ' + artist['artist_popularity'] +
-            '\nNúmero de seguidores: ' + artist['followers'])
+            str(i) +
+            "." +
+            '\nNombre: ' +
+            artist['name'] +
+            '\nGéneros: ' +
+            artist['genres'] +
+            '\nPopularidad: ' +
+            artist['artist_popularity'] +
+            '\nNúmero de seguidores: ' +
+            artist['followers'])
         i += 1
 
 
+def dataReport(datos):
+    printTracks(
+        datos["num_tracks"],
+        datos["tracks_3i"],
+        datos["tracks_3f"])
+    print("\n." * 5 + "\n")
+    printArtists(
+        datos["num_artists"],
+        datos["artists_3i"],
+        datos["artists_3f"])
+    print("\n." * 5 + "\n")
+    printAlbums(
+        datos["num_albums"],
+        datos["albums_3i"],
+        datos["albums_3f"])
+
 # Interfaz
+
 
 def printMenu():
     print("\nBienvenido")
-    print("0- Cargar información en el catálogo")
-    print("2- Encontrar los artistas más populares")
-    # print("3- Clasificar las canciones por popularidad")
+    print(
+        "0- Seleccionar el tipo de representación de la lista")
+    print("1- Cargar información en el catálogo")
+    # print("2- Encontrar los artistas más populares")
+    print("3- Encontrar las canciones mas populares")
     # print(
     #     "4- Encontrar la canción más popular de un artista")
     # print("5- Encontrar la discografía de un artista")
@@ -202,25 +228,60 @@ while True:
         'Seleccione una opción para continuar\n')
 
     if int(inputs[0]) == 0:
-        print(
-            "Cargando información de los archivos ....\n")
-        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(control)
-        printTracks(num_tracks, tracks_3i, tracks_3f)
-        print("\n." * 10 + "\n")
-        printArtists(
-            num_artists,
-            artists_3i,
-            artists_3f)
-        print("\n." * 10 + "\n")
-        printAlbums(num_albums, albums_3i, albums_3f)
+        artists_liststr = input(
+            "Estructura de datos para artists: ")
+        tracks_liststr = input(
+            "Estructura de datos para tracks: ")
+        album_liststr = input(
+            "Estructura de datos para albumes: ")
+        filesize = input(
+            "Archivo que se leerá (sufijo de tamaño): ")
 
     elif int(inputs[0]) == 1:
-        pass
+        # Se crea el controlador asociado a la vista
+        control = controller.newController(
+            artists_liststr, tracks_liststr, album_liststr)
+        print(
+            "Cargando información de los archivos ....")
+        datos = loadData(filesize)
+        report = input(
+            "Desea imprimir del reporte de datos? (y/n) ")
+        if report.lower() == "y":
+            dataReport(datos)
+
+    elif int(inputs[0]) == 3:
+        while True:
+            n = int(
+                input("Cuantas canciones del top desea consultar? "))
+            if 0 < n < datos["num_tracks"]:
+                break
+            else:
+                print(
+                    "por favor escoga un valor valido")
+        controller.sortTracks(control)
+        print("TOP 1",
+              lt.getElement(
+                  control["model"]["tracks"],
+                  1)["name"])
+        # TODO: IMPRIMIR CORERECTAMENTE LA
+        # INFORMACIÓN
+    elif int(inputs[0]) == 6:
+        sort_type = input(
+            "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")
+        print('Por favor espere . . .')
+        time = controller.sortBy(sort_type, control)
+        if bool(time):
+            print(str(round(time, 2)) + ' ms')
+        else:
+            print("por favor escoga una opción valida")
 
     elif int(inputs[0]) == 2:
-        N = int(input("¿Cuántos artistas desea visualizar? "))
-        ai, af, lista = controller.rankingArtistas(control, N)
+        N = int(
+            input("¿Cuántos artistas desea visualizar? "))
+        ai, af, lista = controller.rankingArtistas(
+            control,
+            N)
         printRanking(ai, af, lista, N)
-    
+
     else:
         sys.exit(0)

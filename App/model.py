@@ -111,6 +111,7 @@ def artistSize(catalog):
 def albumSize(catalog):
     return lt.size(catalog['albums'])
 
+
 def rankingArtistas(artists, N):
     sublista = lt.subList(artists, 1, N)
     ai = getFirst(sublista)
@@ -120,6 +121,7 @@ def rankingArtistas(artists, N):
 
 # Funciones de consulta
 
+
 def getFirst(list):
     t_3i = lt.newList('ARRAY_LIST')
     for pos in range(1, 4):
@@ -127,6 +129,7 @@ def getFirst(list):
         lt.addLast(t_3i, elem)
 
     return t_3i
+
 
 def getLast(list):
     t_3f = lt.newList('ARRAY_LIST')
@@ -138,15 +141,37 @@ def getLast(list):
     return t_3f
 
 
-# Funciones utilizadas para comparar elementos en un ordenamiento
+# Funciones utilizadas para comparar elementos en un
+# ordenamiento
 
 
-# def compareTracks():
+def compareTracks(track1, track2,):
+    """
+        Devuelve verdadero (True) si la 'popularity' del track1 es mayor que la del track2
+        Args:
+        track1: informacion del primer track que incluye su valor 'popularity'
+        track2: informacion del segundo track que incluye su valor 'popularity'
+    """
+
+    toRank = ["popularity", "duration_ms", ]
+
+    for x in toRank:
+        if track1[x] != track2[x]:
+            return int(
+                float(track1[x])) > int(
+                float(track2[x]))
+    # no podemos pasar el nombre a sun float, por lo
+    # que hacemos esto en vez al final
+    return track1["name"] > track2["name"]
+
 
 def compareArtists2(art1, art2):
-    return int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
+    return int(
+        float(art1['artist_popularity'])) > int(
+        float(art2['artist_popularity']))
 
-def compareArtists(artist1, artist2):
+
+def compareArtists(artist1, artist2,):
     """
     Devuelve verdadero (True) si artist1 es más popular (o en su defecto, tiene más followers o su nombre
     es primero alfabéticamente) que artist2
@@ -174,38 +199,46 @@ def compareArtists(artist1, artist2):
             return False
     else:
         return True
-        
+
 
 def comparePopularity(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene más popularidad, 0 si son iguales y -1 de lo contrario
     """
-    comp = int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
-    if comp == True:
+    comp = int(
+        float(art1['artist_popularity'])) > int(
+        float(art2['artist_popularity']))
+    if comp:
         return 1
     elif int(float(art1['artist_popularity'])) == int(float(art2['artist_popularity'])):
         return 0
     else:
         return -1
 
+
 def compareFollowers(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene más seguidores, 0 si son iguales y -1 de lo contrario
     """
-    comp = int(float(art1['followers'])) > int(float(art2['followers']))
-    if comp == True:
+    comp = int(
+        float(art1['followers'])) > int(
+        float(art2['followers']))
+    if comp:
         return 1
     elif int(float(art1['followers'])) == int(float(art2['followers'])):
         return 0
     else:
         return -1
 
+
 def compareName(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene un nombre primero en el alfabeto, 0 si son iguales y -1 de lo contrario
     """
-    comp = (str(art1['name']).lower()) < (str(art2['name']).lower())
-    if comp == True:
+    comp = (
+        str(art1['name']).lower()) < (
+        str(art2['name']).lower())
+    if comp:
         return 1
     elif (art1['name']) == (art2['name']):
         return 0
@@ -217,9 +250,12 @@ def compareName(art1, art2):
 
 # Funciones de ordenamiento
 
-# def sortTracks():
+def sortTracks(catalog):
+    sub_list = catalog["tracks"]
+    me.sort(sub_list, compareTracks)
 
 # def sortAlbums():
 
+
 def sortArtists(catalog):
-    me.sort(catalog['artists'],compareArtists)
+    me.sort(catalog['artists'], compareArtists)
