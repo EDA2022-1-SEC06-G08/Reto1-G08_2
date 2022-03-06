@@ -43,21 +43,20 @@ El controlador se encarga de mediar entre la vista y el modelo.
 # Inicialización del Catálogo de libros
 
 
-def newController(artists_liststr):
+def newController():
     """
     Crea una instancia del modelo
     """
     control = {
         'model': None
     }
-    control['model'] = model.newCatalog(
-        artists_liststr)
+    control['model'] = model.newCatalog()
     return control
 
 
 # Funciones para la carga de datos
 
-def loadData(filesize, control):
+def loadData(control, filesize = 'large'):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
@@ -67,20 +66,19 @@ def loadData(filesize, control):
     artists = loadArtists(catalog, filesize)
     albums = loadAlbums(catalog, filesize)
 
-    tracks_3i = getFirstTracks(catalog)
-    tracks_3f = getLastTracks(catalog)
+    tracks_3i = getFirst(catalog['tracks'])
+    tracks_3f = getLast(catalog['tracks'])
 
-    artists_3i = getFirstArtists(catalog)
-    artists_3f = getLastArtists(catalog)
+    artists_3i = getFirst(catalog['artists'])
+    artists_3f = getLast(catalog['artists'])
 
-    albums_3i = getFirstAlbums(catalog)
-    albums_3f = getLastAlbums(catalog)
+    albums_3i = getFirst(catalog['albums'])
+    albums_3f = getLast(catalog['albums'])
 
-    # sort(catalog)
     return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
 
 
-def loadTracks(catalog, filesize='large'):
+def loadTracks(catalog, filesize):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -101,6 +99,7 @@ def loadArtists(catalog, filesize='large'):
         open(artistfile, encoding='utf-8'))
     for artist in input_file:
         model.addArtist(catalog, artist)
+    sortArtists(catalog)
     return model.artistSize(catalog)
 
 
@@ -116,104 +115,29 @@ def loadAlbums(catalog, filesize='large'):
     return model.albumSize(catalog)
 
 
+#Funciones de requerimientos
+
+def rankingArtistas(control, N):
+    catalog = control['model']
+    ai, af, lista = model.rankingArtistas(catalog['artists'], N)
+
+    return ai, af, lista
+
+
 # Funciones de ordenamiento
 
-def sort(catalog):
-    """
-    Llama a otras funciones para ordenar el catalog entero
-    """
-    sortTracks(catalog)
-    sortArtists(catalog)
-    sortAlbums(catalog)
-
-
-def sortTracks(catalog):
-    """
-    Ordena las tracks mediante model.py
-    """
-
-    model.sortTracks(catalog)
-
-
 def sortArtists(catalog):
-    """
-    Ordena los artistas mediante model.py
-    """
-
     model.sortArtists(catalog)
-
-
-def sortAlbums(catalog):
-    """
-    Ordena los álbumes mediante model.py
-    """
-
-    model.sortAlbums(catalog)
 
 
 # Funciones de consulta sobre el catálogo
 
-def getFirstTracks(catalog):
-    """
-    Obtiene los primeros 3 tracks de la lista de tracks
-    """
+def getFirst(list):
+    list = model.getFirst(list)
 
-    tracks = model.getFirstTracks(catalog)
+    return list
 
-    return tracks
+def getLast(list):
+    list = model.getLast(list)
 
-
-def getLastTracks(catalog):
-    """
-    Obtiene los últimos 3 tracks de la lista de tracks
-    """
-
-    tracks = model.getLastTracks(catalog)
-
-    return tracks
-
-
-def getFirstArtists(catalog):
-    """
-    Obtiene los primeros 3 artistas de la lista de artistas
-    """
-
-    artists = model.getFirstArtists(catalog)
-
-    return artists
-
-
-def getLastArtists(catalog):
-    """
-    Obtiene los últimos 3 artistas de la lista de artistas
-    """
-
-    artists = model.getLastArtists(catalog)
-
-    return artists
-
-
-def getFirstAlbums(catalog):
-    """
-    Obtiene los primeros 3 álbumes de la lista de álbumes
-    """
-
-    albums = model.getFirstAlbums(catalog)
-
-    return albums
-
-
-def getLastAlbums(catalog):
-    """
-    Obtiene los últimos 3 álbumes de la lista de álbumes
-    """
-
-    albums = model.getLastAlbums(catalog)
-
-    return albums
-
-
-def sortBy(sort_type, catalog):
-    time = model.sortBy(sort_type, catalog["model"])
-
-    return time
+    return list
