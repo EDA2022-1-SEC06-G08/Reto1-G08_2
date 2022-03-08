@@ -301,6 +301,6 @@ def sortArtists(artists):
 
 def sortAlbumsTime(albums):
     sublist = lt.subList(albums, 1, lt.size(albums))
-    sublist = me.sort(sublist, compareAlbumsTime)
+    -me.sort(sublist, compareAlbumsTime)
     
     return sublist
