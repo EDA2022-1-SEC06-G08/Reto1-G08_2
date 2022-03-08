@@ -20,7 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-from App.model import trackSize
+from model import trackSize
 import config as cf
 import model
 import sys
@@ -65,6 +65,7 @@ def loadData(control, filesize = 'large'):
     tracks = loadTracks(catalog, filesize)
     artists = loadArtists(catalog, filesize)
     albums = loadAlbums(catalog, filesize)
+    loadAlbumTime(catalog)
 
     tracks_3i = getFirst(catalog['tracks'])
     tracks_3f = getLast(catalog['tracks'])
@@ -114,30 +115,45 @@ def loadAlbums(catalog, filesize='large'):
         model.addAlbum(catalog, album)
     return model.albumSize(catalog)
 
+def loadAlbumTime(catalog):
+    albums = catalog['albums']
+    catalog['album_time'] = model.sortAlbumsTime(albums)
+
 
 #Funciones de requerimientos
 
 def rankingArtistas(control, N):
     catalog = control['model']
-    ai, af, lista = model.rankingArtistas(catalog['artists'], N)
+    lista = model.rankingArtistas(catalog['artists'], N)
 
-    return ai, af, lista
+    return lista
 
 
 # Funciones de ordenamiento
 
 def sortArtists(catalog):
-    model.sortArtists(catalog)
+    model.sortArtists(catalog['artists'])
 
+def sortAlbumsTime(albums):
+    time_sorted = model.sortAlbumsTime(albums)
+
+    return time_sorted
 
 # Funciones de consulta sobre el catálogo
 
 def getFirst(list):
+    #Retorna los primeros tres elementos de una lista
     list = model.getFirst(list)
 
     return list
 
 def getLast(list):
+    #Retornal los últimos tres elementos de una lista
     list = model.getLast(list)
 
     return list
+
+def albumsInTimeSpan(anio_i, anio_f, albums):
+    numTotal = model.albumsInTimeSpan(anio_i, anio_f, albums)
+
+    return numTotal

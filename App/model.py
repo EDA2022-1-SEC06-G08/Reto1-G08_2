@@ -28,7 +28,8 @@
 import csv
 import config as cf
 import sys
-import time
+import datetime as dt
+from datetime import datetime as DT
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import (
     shellsort as sh,
@@ -37,6 +38,7 @@ from DISClib.Algorithms.Sorting import (
     mergesort as me,
     quicksort as qu
 )
+from DISClib.Algorithms.Search import binarysearch as bi
 assert cf
 
 maxInt = sys.maxsize
@@ -66,7 +68,8 @@ def newCatalog():
     """
     catalog = {'tracks': None,
                'artists': None,
-               'albums': None}
+               'albums': None,
+               'time_album': None}
 
     catalog['tracks'] = lt.newList("ARRAY_LIST")
     # cmpfunction = compareTracks)
@@ -74,6 +77,7 @@ def newCatalog():
     # cmpfunction=compareArtists)
     catalog['albums'] = lt.newList('ARRAY_LIST')
     # cmpfunction=compareAlbums)
+    catalog['time_album'] = lt.newList('ARRAY_LIST')
 
     return catalog
 
@@ -113,10 +117,8 @@ def albumSize(catalog):
 
 def rankingArtistas(artists, N):
     sublista = lt.subList(artists, 1, N)
-    ai = getFirst(sublista)
-    af = getLast(sublista)
 
-    return ai, af, sublista
+    return sublista
 
 # Funciones de consulta
 
@@ -137,14 +139,62 @@ def getLast(list):
 
     return t_3f
 
+def albumsInTimeSpan(anio_i, anio_f, albums):
+    DTanio_i = dt.datetime(anio_i, 1, 1, 0, 0, 0, 0)
+    DTanio_f = dt.datetime(anio_f, 1, 1, 0, 0, 0, 0)
+
+    firstPos = bi.busqueda(albums, DTanio_i, searchAlbumTime)
+    lastPos = bi.busqueda(albums, DTanio_f, searchAlbumTime)
+
+    numTotal = lt.subList(albums, firstPos, lastPos)
+
+    return numTotal
+
+
+#Funciones utilizadas para comparar elementos en una búsqueda
+
+def searchAlbumTime(alb_list, current_pos, value):
+    current_album = lt.getElement(alb_list, current_pos)
+    previous_album = lt.getElement(alb_list, current_pos-1)
+    
+    current_date = current_album['release date']
+    previous_date = previous_album(alb_list, current_pos-1)['release date']
+
+    current_date_precision = current_album['release_date_precision']
+    previous_date_precision = previous_album['release_date_precision']
+
+    if current_date_precision == 'day':
+        current_date_format = DT.strptime(current_date, "%Y-%m-%d")
+    elif current_date_precision == 'month':
+        current_date_format = DT.strptime(current_date, "%b-%y")
+    else:
+        current_date = int(current_date)
+        current_date_format = dt.datetime(int(current_date), 1, 1, 0, 0, 0, 0)
+
+    if previous_date_precision == 'day':
+        previous_date_format = DT.strptime(previous_date, "%Y-%m-%d")
+    elif previous_date_precision == 'month':
+        previous_date_format = DT.strptime(previous_date, "%b-%y")
+    else:
+        previous_date = int(previous_date)
+        previous_date_format = dt.datetime(int(previous_date), 1, 1, 0, 0, 0, 0)
+
+    current_true = DT.strftime(current_date_format, "%Y") >= value
+    previous_true = DT.strftime(previous_date_format, "%Y") >= value
+
+    if current_true:
+        if not previous_true:
+            return 0
+        else:
+            return 1
+    else:
+        return -1
+
 
 # Funciones utilizadas para comparar elementos en un ordenamiento
 
 
 # def compareTracks():
-
-def compareArtists2(art1, art2):
-    return int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
 
 def compareArtists(artist1, artist2):
     """
@@ -173,8 +223,7 @@ def compareArtists(artist1, artist2):
         else:
             return False
     else:
-        return True
-        
+        return False
 
 def comparePopularity(art1, art2):
     """
@@ -212,6 +261,32 @@ def compareName(art1, art2):
     else:
         return -1
 
+
+def compareAlbumsTime(alb1, alb2):
+    date1 = alb1['release_date']
+    date2 = alb2['release_date']
+    date_precision1 = alb1['release_date_precision']
+    date_precision2 = alb2['release_date_precision']
+
+    if date_precision1 == 'day':
+        date1Format = DT.strptime(date1, "%Y-%m-%d")
+    elif date_precision1 == 'month':
+        date1Format = DT.strptime(date1, "%b-%y")
+    else:
+        date1 = int(date1)
+        date1Format = dt.datetime(int(date1), 1, 1, 0, 0, 0, 0)
+
+    if date_precision2 == 'day':
+        date2Format = DT.strptime(date2, "%Y-%m-%d")
+    elif date_precision2 == 'month':
+        date2Format = DT.strptime(date2, "%b-%y")
+    else:
+        date2 = int(date2)
+        date2Format = dt.datetime(int(date2), 1, 1, 0, 0, 0, 0)
+
+
+    return date1Format < date2Format
+
 # def compareAlbums():
 
 
@@ -221,5 +296,11 @@ def compareName(art1, art2):
 
 # def sortAlbums():
 
-def sortArtists(catalog):
-    me.sort(catalog['artists'],compareArtists)
+def sortArtists(artists):
+    me.sort(artists, compareArtists)
+
+def sortAlbumsTime(albums):
+    sublist = lt.subList(albums, 1, lt.size(albums))
+    sublist = me.sort(sublist, compareAlbumsTime)
+    
+    return sublist
