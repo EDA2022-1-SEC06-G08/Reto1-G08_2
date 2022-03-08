@@ -20,11 +20,12 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-
+from controller import getFirst, getLast
 import config as cf
 import sys
 import csv
 import controller
+import datetime as dt
 from DISClib.ADT import list as lt
 assert cf
 
@@ -52,11 +53,11 @@ operación solicitada
 # Cargar
 
 
-def loadData(control, filesize):
+def loadData(control):
     """
     Solicita al controlador que cargue los datos en el modelo
     """
-    datos = controller.loadData(control, filesize)
+    datos = controller.loadData(control)
     return datos
 
 
@@ -145,47 +146,90 @@ def printAlbums(num, Al_3i, Al_3f):
             '\nFecha de lanzamiento: ' +
             album['release_date'])
 
-
-def printRanking(ai, af, lista, N):
+def printRanking(lista, N):
     i = 1
-    size = lt.size(lista)
-    print(
-        "Primeros " +
-        str(N) +
-        " artistas por popularidad:\n")
-    for artist in lt.iterator(ai):
-        print(
-            str(i) +
-            "." +
-            '\nNombre: ' +
-            artist['name'] +
-            '\nGéneros: ' +
-            artist['genres'] +
-            '\nPopularidad: ' +
-            artist['artist_popularity'] +
-            '\nNúmero de seguidores: ' +
-            artist['followers'])
-        i += 1
-    print(".")
-    for pos in range(4, size - 2):
-        print(
-            str(i) + "." +
-            lt.getElement(lista, pos)['name'])
-        i += 1
-    print(".")
-    for artist in lt.iterator(af):
-        print(
-            str(i) +
-            "." +
-            '\nNombre: ' +
-            artist['name'] +
-            '\nGéneros: ' +
-            artist['genres'] +
-            '\nPopularidad: ' +
-            artist['artist_popularity'] +
-            '\nNúmero de seguidores: ' +
-            artist['followers'])
-        i += 1
+    print("\n\nPrimeros " + str(N) + " artistas por popularidad:\n")
+    if N < 7:
+        for artist in lt.iterator(lista):
+            print(
+                str(i) + "." +
+                '\nNombre: ' + artist['name'] +
+                '\nGéneros: ' + artist['genres'] +
+                '\nPopularidad: ' + artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' + artist['followers'])
+                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+            i += 1
+    else:
+        size = lt.size(lista)
+        ai = getFirst(lista)
+        for artist in lt.iterator(ai):
+            print(
+                str(i) + "." +
+                '\nNombre: ' + artist['name'] +
+                '\nGéneros: ' + artist['genres'] +
+                '\nPopularidad: ' + artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' + artist['followers']) 
+                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+            i += 1
+        print(".")
+        for pos in range(4, size - 2):
+            print(
+                str(i) + "." +
+                lt.getElement(lista, pos)['name'])
+            i += 1
+        print(".")
+        af = getLast(lista)
+        for artist in lt.iterator(af):
+            print(
+                str(i) + "." +
+                '\nNombre: ' + artist['name'] +
+                '\nGéneros: ' + artist['genres'] +
+                '\nPopularidad: ' + artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' + artist['followers'])
+                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+            i += 1
+
+def printAlbumsTimeSpan(total):
+    size = lt.size(total)
+    print("\n\nNúmero total de álbumes en el periodo: " + str(size))
+    if size > 6:
+        print("\nPrimeros 3 albumes: ")
+        ai =  getFirst(total)
+        i = 0
+        for album in lt.iterator(ai):
+            i += 1
+            print(
+                str(i) + "." +
+                '\nNombre: ' + album['name'] +
+                '\nFecha de publicación: ' + album['release_date'] +
+                '\nTipo de album: ' + album['album_type'] + 
+                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nNúmero de canciones: ' + album['total_tracks'])
+
+        print("\nÚltimos 3 albumes: ")
+        af =  getFirst(total)
+        i = 0
+        for album in lt.iterator(af):
+            i += 1
+            print(
+                str(i) + "." +
+                '\nNombre: ' + album['name'] +
+                '\nFecha de publicación: ' + album['release_date'] +
+                '\nTipo de album: ' + album['album_type'] + 
+                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nNúmero de canciones: ' + album['total_tracks'])
+    
+    else:
+        i = 0
+        for album in lt.iterator(total):
+            i += 1
+            print(
+                str(i) + "." +
+                '\nNombre: ' + album['name'] +
+                '\nFecha de publicación: ' + album['release_date'] +
+                '\nTipo de album: ' + album['album_type'] + 
+                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nNúmero de canciones: ' + album['total_tracks'])
 
 
 def dataReport(datos):
@@ -209,8 +253,7 @@ def dataReport(datos):
 
 def printMenu():
     print("\nBienvenido")
-    print(
-        "0- Seleccionar el tipo de representación de la lista")
+    print("0- Cargar el archivo")
     print("1- Cargar información en el catálogo")
     print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
@@ -219,6 +262,8 @@ def printMenu():
     # print("5- Encontrar la discografía de un artista")
 
 
+
+first_op2 = True
 """
 Menu principal
 """
@@ -228,19 +273,32 @@ while True:
         'Seleccione una opción para continuar\n')
 
     if int(inputs[0]) == 0:
-        filesize = input(
-            "Archivo que se leerá (sufijo de tamaño): ")
-
-    elif int(inputs[0]) == 1:
         # Se crea el controlador asociado a la vista
         control = controller.newController()
         print(
             "Cargando información de los archivos ....")
-        datos = loadData(control, filesize)
+        datos = loadData(control)
         report = input(
             "Desea imprimir del reporte de datos? (y/n) ")
         if report.lower() == "y":
             dataReport(datos)
+
+    elif int(inputs[0]) == 1:
+        anio_i = int(input("¿Desde qué año desea realizar su busqueda? (Por favor escriba los 4 dígitos del año) "))
+        anio_f = int(input("¿Hasta qué año desea realizar su búsqueda? (Por favor escriba los 4 dígitos del año) "))
+        if anio_f < anio_i:
+            print("Por favor introduzca un intervalo de tiempo válido")
+            pass
+        numTotal = controller.albumsInTimeSpan(anio_i, anio_f, control)
+        printAlbumsTimeSpan(numTotal)
+
+    elif int(inputs[0]) == 2:
+        N = int(input("¿Cuántos artistas desea visualizar? "))
+        if N < 1 or N > 56129:
+            print("Por favor ingrese un número válido de artistas")
+            pass
+        lista = controller.rankingArtistas(control, N)
+        printRanking(lista, N)
 
     elif int(inputs[0]) == 3:
         while True:
@@ -258,6 +316,10 @@ while True:
                   1)["name"])
         # TODO: IMPRIMIR CORERECTAMENTE LA
         # INFORMACIÓN
+
+    else:
+        sys.exit(0)
+    """
     elif int(inputs[0]) == 6:
         sort_type = input(
             "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")
@@ -268,13 +330,17 @@ while True:
         else:
             print("por favor escoga una opción valida")
 
-    elif int(inputs[0]) == 2:
-        N = int(
-            input("¿Cuántos artistas desea visualizar? "))
-        ai, af, lista = controller.rankingArtistas(
-            control,
-            N)
-        printRanking(ai, af, lista, N)
-
-    else:
-        sys.exit(0)
+        print(
+            "Cargando información de los archivos ....\n")
+        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(control)
+        printTracks(num_tracks, tracks_3i, tracks_3f)
+        print("\n." * 10 + "\n")
+        printArtists(
+            num_artists,
+            artists_3i,
+            artists_3f)
+        print("\n." * 10 + "\n")
+        printAlbums(num_albums, albums_3i, albums_3f)
+        print(control['model']['time_album'])
+    
+    """
