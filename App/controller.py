@@ -62,7 +62,6 @@ def loadData(control, filesize='large'):
     estructura de datos
     """
     catalog = control['model']
-<<<<<<< HEAD
     datos = {
         "num_tracks": loadTracks(
             catalog,
@@ -80,23 +79,6 @@ def loadData(control, filesize='large'):
         "albums_3i": getFirst(catalog["albums"]),
         "albums_3f": getLast(catalog["albums"])}
     return datos
-=======
-    tracks = loadTracks(catalog, filesize)
-    artists = loadArtists(catalog, filesize)
-    albums = loadAlbums(catalog, filesize)
-    loadAlbumTime(catalog)
-
-    tracks_3i = getFirst(catalog['tracks'])
-    tracks_3f = getLast(catalog['tracks'])
-
-    artists_3i = getFirst(catalog['artists'])
-    artists_3f = getLast(catalog['artists'])
-
-    albums_3i = getFirst(catalog['albums'])
-    albums_3f = getLast(catalog['albums'])
-
-    return tracks, artists, albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f
->>>>>>> Task-1
 
 
 def loadTracks(catalog, filesize):
@@ -145,14 +127,7 @@ def loadAlbumTime(catalog):
 
 def rankingArtistas(control, N):
     catalog = control['model']
-<<<<<<< HEAD
-    ai, af, lista = model.rankingArtistas(
-        catalog
-        ['artists'],
-        N)
-=======
     lista = model.rankingArtistas(catalog['artists'], N)
->>>>>>> Task-1
 
     return lista
 
@@ -190,11 +165,8 @@ def getLast(list):
     list = model.getLast(list)
 
     return list
-<<<<<<< HEAD
-=======
 
 def albumsInTimeSpan(anio_i, anio_f, albums):
     numTotal = model.albumsInTimeSpan(anio_i, anio_f, albums)
 
     return numTotal
->>>>>>> Task-1
