@@ -21,6 +21,8 @@
  """
 
 from model import trackSize
+from xcffib import NONE
+from App.model import newCatalog, trackSize
 import config as cf
 import model
 import sys
@@ -121,7 +123,8 @@ def loadAlbums(catalog, filesize='large'):
 
 def rankingArtistas(control, N):
     catalog = control['model']
-    lista = model.rankingArtistas(catalog['artists'], N)
+    lista = model.rankingArtistas(
+        catalog['artists'], N)
 
     return lista
 
@@ -136,8 +139,10 @@ def sortTracks(catalog):
 
     model.sortTracks(catalog["model"])
 
+
 def sortArtists(catalog):
     model.sortArtists(catalog['artists'])
+
 
 def sortAlbums(catalog):
     model.sortAlbums(catalog['albums'])
@@ -146,23 +151,28 @@ def sortAlbums(catalog):
 # Funciones de consulta sobre el catálogo
 
 def getFirst(list):
-    #Retorna los primeros tres elementos de una lista
+    # Retorna los primeros tres elementos de una
+    # lista
     list = model.getFirst(list)
 
     return list
 
 
 def getLast(list):
-    #Retornal los últimos tres elementos de una lista
+    # Retornal los últimos tres elementos de una
+    # lista
     list = model.getLast(list)
 
     return list
 
+
 def albumsInTimeSpan(anio_i, anio_f, control):
     albums = control['model']['albums']
-    numTotal = model.albumsInTimeSpan(anio_i, anio_f, albums)
+    numTotal = model.albumsInTimeSpan(
+        anio_i, anio_f, albums)
 
     return numTotal
+
 
 def findMainArtist(artID, control):
     artists = control['model']['artists']
@@ -170,8 +180,26 @@ def findMainArtist(artID, control):
 
     return artName
 
+
 def findMainTrack(trackID, control):
     tracks = control['model']['tracks']
     trackName = model.findMainTrack(trackID, tracks)
 
     return trackName
+
+
+def topTracks(control, n):
+
+    top = model.topTracks(control, n)
+
+    return top
+
+# La respuesta esperada debe contener:
+
+    # o El nombre de la canción (name).
+    # o El nombre del álbum al que pertenece.
+    # o El o los nombres de los artistas involucrados.
+    # o Su valor de popularidad (popularity).
+    # o La duración en minutos (duration_ms).
+    # o El enlace externo de Spotify (href).
+    # o La letra (lyrics) si esta disponible.

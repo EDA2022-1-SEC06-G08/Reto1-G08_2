@@ -142,32 +142,50 @@ def printAlbums(num, Al_3i, Al_3f):
             '\nFecha de lanzamiento: ' +
             album['release_date'])
 
+
 def printRanking(lista, N):
     i = 1
-    print("\n\nPrimeros " + str(N) + " artistas por popularidad:\n")
+    print(
+        "\n\nPrimeros " +
+        str(N) +
+        " artistas por popularidad:\n")
     if N < 7:
         for artist in lt.iterator(lista):
-            cancion_referente = controller.findMainTrack(artist['track_id'], control)
+            cancion_referente = controller.findMainTrack(
+                artist['track_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + artist['name'] +
-                '\nGéneros: ' + artist['genres'] +
-                '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers'] +
-                '\nCanción referente: ' + cancion_referente)
+                str(i) +
+                "." +
+                '\nNombre: ' +
+                artist['name'] +
+                '\nGéneros: ' +
+                artist['genres'] +
+                '\nPopularidad: ' +
+                artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' +
+                artist['followers'] +
+                '\nCanción referente: ' +
+                cancion_referente)
             i += 1
     else:
         size = lt.size(lista)
         ai = getFirst(lista)
         for artist in lt.iterator(ai):
-            cancion_referente = controller.findMainTrack(artist['track_id'], control)
+            cancion_referente = controller.findMainTrack(
+                artist['track_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + artist['name'] +
-                '\nGéneros: ' + artist['genres'] +
-                '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers'] +
-                '\nCanción referente: ' + cancion_referente)
+                str(i) +
+                "." +
+                '\nNombre: ' +
+                artist['name'] +
+                '\nGéneros: ' +
+                artist['genres'] +
+                '\nPopularidad: ' +
+                artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' +
+                artist['followers'] +
+                '\nCanción referente: ' +
+                cancion_referente)
             i += 1
         print(".")
         for pos in range(4, size - 2):
@@ -178,60 +196,85 @@ def printRanking(lista, N):
         print(".")
         af = getLast(lista)
         for artist in lt.iterator(af):
-            cancion_referente = controller.findMainTrack(artist['track_id'], control)
+            cancion_referente = controller.findMainTrack(
+                artist['track_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + artist['name'] +
-                '\nGéneros: ' + artist['genres'] +
-                '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers'] +
-                '\nCanción referente: ' + cancion_referente)
+                str(i) +
+                "." +
+                '\nNombre: ' +
+                artist['name'] +
+                '\nGéneros: ' +
+                artist['genres'] +
+                '\nPopularidad: ' +
+                artist['artist_popularity'] +
+                '\nNúmero de seguidores: ' +
+                artist['followers'] +
+                '\nCanción referente: ' +
+                cancion_referente)
             i += 1
+
 
 def printAlbumsTimeSpan(total):
     size = lt.size(total)
-    print("\n\nNúmero total de álbumes en el periodo: " + str(size))
+    print(
+        "\n\nNúmero total de álbumes en el periodo: " +
+        str(size))
     if size > 6:
         print("\nPrimeros 3 albumes: ")
-        ai =  getFirst(total)
+        ai = getFirst(total)
         i = 0
         for album in lt.iterator(ai):
             i += 1
-            artista_principal = controller.findMainArtist(album['artist_id'], control)
+            artista_principal = controller.findMainArtist(
+                album['artist_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + album['name'] +
-                '\nFecha de publicación: ' + album['release_date'] +
-                '\nTipo de album: ' + album['album_type'] + 
-                '\nArtista principal asociado: ' + artista_principal +
-                '\nNúmero de canciones: ' + album['total_tracks'])
+                str(i) + "." + '\nNombre: ' +
+                album['name'] +
+                '\nFecha de publicación: ' +
+                album['release_date'] +
+                '\nTipo de album: ' +
+                album['album_type'] +
+                '\nArtista principal asociado: ' +
+                artista_principal +
+                '\nNúmero de canciones: ' +
+                album['total_tracks'])
 
         print("\nÚltimos 3 albumes: ")
-        af =  getLast(total)
-        i = size-3
+        af = getLast(total)
+        i = size - 3
         for album in lt.iterator(af):
             i += 1
-            artista_principal = controller.findMainArtist(album['artist_id'], control)
+            artista_principal = controller.findMainArtist(
+                album['artist_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + album['name'] +
-                '\nFecha de publicación: ' + album['release_date'] +
-                '\nTipo de album: ' + album['album_type'] + 
-                '\nArtista principal asociado: ' + artista_principal +
-                '\nNúmero de canciones: ' + album['total_tracks'])
-    
+                str(i) + "." + '\nNombre: ' +
+                album['name'] +
+                '\nFecha de publicación: ' +
+                album['release_date'] +
+                '\nTipo de album: ' +
+                album['album_type'] +
+                '\nArtista principal asociado: ' +
+                artista_principal +
+                '\nNúmero de canciones: ' +
+                album['total_tracks'])
+
     else:
         i = 0
         for album in lt.iterator(total):
             i += 1
-            artista_principal = controller.findMainArtist(album['artist_id'], control)
+            artista_principal = controller.findMainArtist(
+                album['artist_id'], control)
             print(
-                str(i) + "." +
-                '\nNombre: ' + album['name'] +
-                '\nFecha de publicación: ' + album['release_date'] +
-                '\nTipo de album: ' + album['album_type'] + 
-                '\nArtista principal asociado: ' + artista_principal +
-                '\nNúmero de canciones: ' + album['total_tracks'])
+                str(i) + "." + '\nNombre: ' +
+                album['name'] +
+                '\nFecha de publicación: ' +
+                album['release_date'] +
+                '\nTipo de album: ' +
+                album['album_type'] +
+                '\nArtista principal asociado: ' +
+                artista_principal +
+                '\nNúmero de canciones: ' +
+                album['total_tracks'])
 
 
 def dataReport(datos):
@@ -256,13 +299,13 @@ def dataReport(datos):
 def printMenu():
     print("\nBienvenido")
     print("0- Cargar el archivo")
-    print("1- Encontrar los álbumes en un periodo de tiempo")
+    print(
+        "1- Encontrar los álbumes en un periodo de tiempo")
     print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
     # print(
     #     "4- Encontrar la canción más popular de un artista")
     # print("5- Encontrar la discografía de un artista")
-
 
 
 first_op2 = True
@@ -286,20 +329,31 @@ while True:
             dataReport(datos)
 
     elif int(inputs[0]) == 1:
-        anio_i = int(input("¿Desde qué año desea realizar su busqueda? (Por favor escriba los 4 dígitos del año) "))
-        anio_f = int(input("¿Hasta qué año desea realizar su búsqueda? (Por favor escriba los 4 dígitos del año) "))
+        anio_i = int(
+            input(
+                "¿Desde qué año desea realizar su busqueda? (Por favor escriba los 4 dígitos del año) "))
+        anio_f = int(
+            input(
+                "¿Hasta qué año desea realizar su búsqueda? (Por favor escriba los 4 dígitos del año) "))
         if anio_f < anio_i or anio_i < 1886 or anio_f > 2019:
-            print("Por favor introduzca un intervalo de tiempo válido")
+            print(
+                "Por favor introduzca un intervalo de tiempo válido")
         else:
-            numTotal = controller.albumsInTimeSpan(anio_i, anio_f, control)
+            numTotal = controller.albumsInTimeSpan(
+                anio_i,
+                anio_f,
+                control)
             printAlbumsTimeSpan(numTotal)
 
     elif int(inputs[0]) == 2:
-        N = int(input("¿Cuántos artistas desea visualizar? "))
+        N = int(
+            input("¿Cuántos artistas desea visualizar? "))
         if N < 1 or N > 56129:
-            print("Por favor ingrese un número válido de artistas")
+            print(
+                "Por favor ingrese un número válido de artistas")
             pass
-        lista = controller.rankingArtistas(control, N)
+        lista = controller.rankingArtistas(
+            control, N)
         printRanking(lista, N)
 
     elif int(inputs[0]) == 3:
@@ -318,6 +372,25 @@ while True:
                   1)["name"])
         # TODO: IMPRIMIR CORERECTAMENTE LA
         # INFORMACIÓN
+
+# elif int(inputs[0]) == 3:
+    #     while True:
+    #         n = int(
+    #             input("Cuantas canciones del top desea consultar? "))
+    #         if 0 < n < datos["num_tracks"]:
+    #             break
+    #         else:
+    #             print(
+    #                 "por favor escoga un valor valido")
+    #     controller.sortTracks(control)
+    #     top = controller.topTracks(control, n)
+    #     print(
+    #         "TOP 1",
+    #         lt.getElement(
+    #             control["model"]["tracks"],
+    #             1)["name"])
+    #     # TODO: IMPRIMIR CORERECTAMENTE LA
+    #     # INFORMACIÓN
 
     else:
         sys.exit(0)
@@ -344,5 +417,5 @@ while True:
         print("\n." * 10 + "\n")
         printAlbums(num_albums, albums_3i, albums_3f)
         print(control['model']['time_album'])
-    
+
     """
