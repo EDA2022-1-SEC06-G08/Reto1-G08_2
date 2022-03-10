@@ -16,8 +16,8 @@ def busqueda(lista, elemento, cmpfunction):
             pos = m
             encontro = True
         elif cmpfunction(lista, m, elemento) == 1:
-            f = m - 1
-        else:
             i = m + 1
+        else:
+            f = m - 1
 
     return pos

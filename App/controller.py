@@ -56,7 +56,7 @@ def newController():
 
 # Funciones para la carga de datos
 
-def loadData(control, filesize='large'):
+def loadData(control):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
@@ -64,14 +64,11 @@ def loadData(control, filesize='large'):
     catalog = control['model']
     datos = {
         "num_tracks": loadTracks(
-            catalog,
-            filesize),
+            catalog),
         "num_artists": loadArtists(
-            catalog,
-            filesize),
+            catalog),
         "num_albums": loadAlbums(
-            catalog,
-            filesize),
+            catalog),
         "tracks_3i": getFirst(catalog["tracks"]),
         "tracks_3f": getLast(catalog["tracks"]),
         "artists_3i": getFirst(catalog["artists"]),
@@ -81,7 +78,7 @@ def loadData(control, filesize='large'):
     return datos
 
 
-def loadTracks(catalog, filesize):
+def loadTracks(catalog, filesize='small'):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -94,7 +91,7 @@ def loadTracks(catalog, filesize):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog, filesize='large'):
+def loadArtists(catalog, filesize='small'):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
@@ -116,11 +113,8 @@ def loadAlbums(catalog, filesize='large'):
         open(albumsfile, encoding='utf-8'))
     for album in input_file:
         model.addAlbum(catalog, album)
+    sortAlbums(catalog)
     return model.albumSize(catalog)
-
-def loadAlbumTime(catalog):
-    albums = catalog['albums']
-    catalog['album_time'] = model.sortAlbumsTime(albums)
 
 
 # Funciones de requerimientos
@@ -142,14 +136,12 @@ def sortTracks(catalog):
 
     model.sortTracks(catalog["model"])
 
-
 def sortArtists(catalog):
     model.sortArtists(catalog['artists'])
 
-def sortAlbumsTime(albums):
-    time_sorted = model.sortAlbumsTime(albums)
+def sortAlbums(catalog):
+    model.sortAlbums(catalog['albums'])
 
-    return time_sorted
 
 # Funciones de consulta sobre el catálogo
 
@@ -166,7 +158,8 @@ def getLast(list):
 
     return list
 
-def albumsInTimeSpan(anio_i, anio_f, albums):
+def albumsInTimeSpan(anio_i, anio_f, control):
+    albums = control['model']['albums']
     numTotal = model.albumsInTimeSpan(anio_i, anio_f, albums)
 
     return numTotal

@@ -207,8 +207,8 @@ def printAlbumsTimeSpan(total):
                 '\nNúmero de canciones: ' + album['total_tracks'])
 
         print("\nÚltimos 3 albumes: ")
-        af =  getFirst(total)
-        i = 0
+        af =  getLast(total)
+        i = size-3
         for album in lt.iterator(af):
             i += 1
             print(
@@ -223,6 +223,7 @@ def printAlbumsTimeSpan(total):
         i = 0
         for album in lt.iterator(total):
             i += 1
+            artista_principal = controller.findMainArtist(album['artist_id'])
             print(
                 str(i) + "." +
                 '\nNombre: ' + album['name'] +
@@ -248,13 +249,13 @@ def dataReport(datos):
         datos["albums_3i"],
         datos["albums_3f"])
 
-# Interfaz
 
+# Interfaz
 
 def printMenu():
     print("\nBienvenido")
     print("0- Cargar el archivo")
-    print("1- Cargar información en el catálogo")
+    print("1- Encontrar los álbumes en un periodo de tiempo")
     print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
     # print(
