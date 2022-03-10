@@ -20,7 +20,8 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-from App.model import trackSize
+from xcffib import NONE
+from App.model import newCatalog, trackSize
 import config as cf
 import model
 import sys
@@ -158,3 +159,20 @@ def getLast(list):
     list = model.getLast(list)
 
     return list
+
+
+def topTracks(control, n):
+
+    top = model.topTracks(control, n)
+
+    return top
+
+# La respuesta esperada debe contener:
+
+    # o El nombre de la canción (name).
+    # o El nombre del álbum al que pertenece.
+    # o El o los nombres de los artistas involucrados.
+    # o Su valor de popularidad (popularity).
+    # o La duración en minutos (duration_ms).
+    # o El enlace externo de Spotify (href).
+    # o La letra (lyrics) si esta disponible.

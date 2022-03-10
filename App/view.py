@@ -242,22 +242,24 @@ while True:
         if report.lower() == "y":
             dataReport(datos)
 
-    elif int(inputs[0]) == 3:
-        while True:
-            n = int(
-                input("Cuantas canciones del top desea consultar? "))
-            if 0 < n < datos["num_tracks"]:
-                break
-            else:
-                print(
-                    "por favor escoga un valor valido")
-        controller.sortTracks(control)
-        print("TOP 1",
-              lt.getElement(
-                  control["model"]["tracks"],
-                  1)["name"])
-        # TODO: IMPRIMIR CORERECTAMENTE LA
-        # INFORMACIÓN
+    # elif int(inputs[0]) == 3:
+    #     while True:
+    #         n = int(
+    #             input("Cuantas canciones del top desea consultar? "))
+    #         if 0 < n < datos["num_tracks"]:
+    #             break
+    #         else:
+    #             print(
+    #                 "por favor escoga un valor valido")
+    #     controller.sortTracks(control)
+    #     top = controller.topTracks(control, n)
+    #     print(
+    #         "TOP 1",
+    #         lt.getElement(
+    #             control["model"]["tracks"],
+    #             1)["name"])
+    #     # TODO: IMPRIMIR CORERECTAMENTE LA
+    #     # INFORMACIÓN
     elif int(inputs[0]) == 6:
         sort_type = input(
             "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")
