@@ -115,6 +115,27 @@ def rankingArtistas(artists, N):
 
     return sublista
 
+def dateFormat(date, date_precision):
+    if date_precision == 'day':
+        date_format = DT.strptime(
+            date, "%Y-%m-%d")
+    elif date_precision == 'month':
+        year = date[4:6]
+        if int(year) < 69:
+            date = date.replace(
+                year, '19' + year)
+            date_format = DT.strptime(
+                date, "%b-%Y")
+        else:
+            date_format = DT.strptime(
+                date, "%b-%y")
+    else:
+        date = int(date)
+        date_format = dt.datetime(
+            date, 1, 1, 0, 0, 0, 0)
+
+    return date_format
+
 # Funciones de consulta
 
 
@@ -173,6 +194,7 @@ def findMainArtist(artID, artists):
 def findMainTrack(trackID, tracks):
     found = False
     i = 1
+    name = None
     while not found and i <= lt.size(tracks):
         track = lt.getElement(tracks, i)
         if track['id'] == trackID:
@@ -182,6 +204,44 @@ def findMainTrack(trackID, tracks):
 
     return name
 
+def findBestTrack(artist, market, tracks):
+    artistID = artist['id']
+    found = False
+    best_track = None
+    i = 1
+
+    while not found and i <= lt.size(tracks):
+        track = lt.getElement(tracks, i)
+        track_artists = track['artists_id']
+        track_markets = track ['available_markets']
+        if artistID in track_artists and market in track_markets:
+            best_track = track
+            found = True
+        i += 1
+    
+    return best_track
+
+def findnumTracks(artist, tracks):
+    artistID = artist['id']
+    numTracks = 0
+    i = 1
+
+    for track in lt.iterator(tracks):
+        if artistID in track['artists_id']:
+            numTracks += 1
+    
+    return numTracks
+
+def findnumAlbums(artist, albums):
+    artistID = artist['id']
+    numAlbums = 0
+    i = 1
+
+    for album in lt.iterator(albums):
+        if artistID == album['artist_id']:
+            numAlbums += 1
+    
+    return numAlbums
 
 # Funciones utilizadas para comparar elementos en una
 # búsqueda
@@ -199,47 +259,14 @@ def searchAlbumTime(alb_list, current_pos):
     current_date = current_album['release_date']
     current_date_precision = current_album['release_date_precision']
 
-    if current_date_precision == 'day':
-        current_date_format = DT.strptime(
-            current_date, "%Y-%m-%d")
-    elif current_date_precision == 'month':
-        year = current_date[4:6]
-        if int(year) < 69:
-            current_date = current_date.replace(
-                year, '19' + year)
-            current_date_format = DT.strptime(
-                current_date, "%b-%Y")
-        else:
-            current_date_format = DT.strptime(
-                current_date, "%b-%y")
-    else:
-        current_date = int(current_date)
-        current_date_format = dt.datetime(
-            current_date, 1, 1, 0, 0, 0, 0)
+    current_date_format = dateFormat(current_date, current_date_precision)
 
     if not bottom:
         previous_album = lt.getElement(
             alb_list, current_pos - 1)
         previous_date = previous_album['release_date']
         previous_date_precision = previous_album['release_date_precision']
-        if previous_date_precision == 'day':
-            previous_date_format = DT.strptime(
-                previous_date, "%Y-%m-%d")
-        elif previous_date_precision == 'month':
-            year = previous_date[4:6]
-            if int(year) < 69:
-                previous_date = previous_date.replace(
-                    year, '19' + year)
-                previous_date_format = DT.strptime(
-                    previous_date, "%b-%Y")
-            else:
-                previous_date_format = DT.strptime(
-                    previous_date, "%b-%y")
-        else:
-            previous_date = int(previous_date)
-            previous_date_format = dt.datetime(
-                previous_date, 1, 1, 0, 0, 0, 0)
-
+        previous_date_format = dateFormat(previous_date, previous_date_precision)
     else:
         previous_date_format = -1
 
@@ -248,23 +275,7 @@ def searchAlbumTime(alb_list, current_pos):
             alb_list, current_pos + 1)
         next_date = next_album['release_date']
         next_date_precision = next_album['release_date_precision']
-        if next_date_precision == 'day':
-            next_date_format = DT.strptime(
-                next_date, "%Y-%m-%d")
-        elif next_date_precision == 'month':
-            year = next_date[4:6]
-            if int(year) < 69:
-                next_date = next_date.replace(
-                    year, '19' + year)
-                next_date_format = DT.strptime(
-                    next_date, "%b-%Y")
-            else:
-                next_date_format = DT.strptime(
-                    next_date, "%b-%y")
-        else:
-            next_date = int(next_date)
-            next_date_format = dt.datetime(
-                next_date, 1, 1, 0, 0, 0, 0)
+        next_date_format = dateFormat(next_date, next_date_precision)
     else:
         next_date_format = -1
 
@@ -340,12 +351,6 @@ def compareTracks(track1, track2,):
     # no podemos pasar el nombre a float, por lo
     # que hacemos esto en vez al final
     return track1["name"] > track2["name"]
-
-
-def compareArtists2(art1, art2):
-    return int(
-        float(art1['artist_popularity'])) > int(
-        float(art2['artist_popularity']))
 
 
 def compareArtists(artist1, artist2,):
@@ -438,33 +443,8 @@ def compareAlbums(alb1, alb2):
     date_precision1 = alb1['release_date_precision']
     date_precision2 = alb2['release_date_precision']
 
-    if date_precision1 == 'day':
-        date1Format = DT.strptime(date1, "%Y-%m-%d")
-    elif date_precision1 == 'month':
-        year = date1[4:6]
-        if int(year) < 69:
-            date1 = date1.replace(year, '19' + year)
-            date1Format = DT.strptime(date1, "%b-%Y")
-        else:
-            date1Format = DT.strptime(date1, "%b-%y")
-    else:
-        date1 = int(date1)
-        date1Format = dt.datetime(
-            int(date1), 1, 1, 0, 0, 0, 0)
-
-    if date_precision2 == 'day':
-        date2Format = DT.strptime(date2, "%Y-%m-%d")
-    elif date_precision2 == 'month':
-        year = date2[4:6]
-        if int(year) < 69:
-            date2 = date2.replace(year, '19' + year)
-            date2Format = DT.strptime(date2, "%b-%Y")
-        else:
-            date2Format = DT.strptime(date2, "%b-%y")
-    else:
-        date2 = int(date2)
-        date2Format = dt.datetime(
-            int(date2), 1, 1, 0, 0, 0, 0)
+    date1Format = dateFormat(date1, date_precision1)
+    date2Format = dateFormat(date2, date_precision2)
 
     return date1Format < date2Format
 
@@ -485,7 +465,7 @@ def sortAlbums(albums):
 
 
 def sortArtists(catalog):
-    me.sort(catalog['artists'], compareArtists)
+    me.sort(catalog, compareArtists)
 
 
 # def topTracks(control, n):

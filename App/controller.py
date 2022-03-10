@@ -21,7 +21,6 @@
  """
 
 from model import trackSize
-from xcffib import NONE
 from App.model import newCatalog, trackSize
 import config as cf
 import model
@@ -80,7 +79,7 @@ def loadData(control):
     return datos
 
 
-def loadTracks(catalog, filesize='large'):
+def loadTracks(catalog, filesize='small'):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -93,7 +92,7 @@ def loadTracks(catalog, filesize='large'):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog, filesize='large'):
+def loadArtists(catalog, filesize='small'):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
@@ -106,7 +105,7 @@ def loadArtists(catalog, filesize='large'):
     return model.artistSize(catalog)
 
 
-def loadAlbums(catalog, filesize='large'):
+def loadAlbums(catalog, filesize='small'):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """
@@ -128,6 +127,13 @@ def rankingArtistas(control, N):
 
     return lista
 
+
+# Funciones para la creación de datos
+
+def dateFormat(date):
+    date_format = model.dateFormat(date)
+
+    return date_format
 
 # Funciones de ordenamiento
 
@@ -187,6 +193,15 @@ def findMainTrack(trackID, control):
 
     return trackName
 
+def findBestTrack(artist, market, control):
+    tracks = control['model']['tracks']
+    albums = control['model']['tracks']
+
+    best_track = model.findBestTrack(artist, market, tracks)
+    numTracks = model.findnumTracks(artist, tracks)
+    numAlbums = model.findnumAlbums(artist, albums)
+
+    return best_track, numTracks, numAlbums
 
 def topTracks(control, n):
 
