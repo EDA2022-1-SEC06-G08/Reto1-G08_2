@@ -46,10 +46,6 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-# Crear controlador
-
-# Se crea el controlador asociado a la vista
-
 # Cargar
 
 
@@ -151,25 +147,27 @@ def printRanking(lista, N):
     print("\n\nPrimeros " + str(N) + " artistas por popularidad:\n")
     if N < 7:
         for artist in lt.iterator(lista):
+            cancion_referente = controller.findMainTrack(artist['track_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + artist['name'] +
                 '\nGéneros: ' + artist['genres'] +
                 '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers'])
-                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+                '\nNúmero de seguidores: ' + artist['followers'] +
+                '\nCanción referente: ' + cancion_referente)
             i += 1
     else:
         size = lt.size(lista)
         ai = getFirst(lista)
         for artist in lt.iterator(ai):
+            cancion_referente = controller.findMainTrack(artist['track_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + artist['name'] +
                 '\nGéneros: ' + artist['genres'] +
                 '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers']) 
-                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+                '\nNúmero de seguidores: ' + artist['followers'] +
+                '\nCanción referente: ' + cancion_referente)
             i += 1
         print(".")
         for pos in range(4, size - 2):
@@ -180,13 +178,14 @@ def printRanking(lista, N):
         print(".")
         af = getLast(lista)
         for artist in lt.iterator(af):
+            cancion_referente = controller.findMainTrack(artist['track_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + artist['name'] +
                 '\nGéneros: ' + artist['genres'] +
                 '\nPopularidad: ' + artist['artist_popularity'] +
-                '\nNúmero de seguidores: ' + artist['followers'])
-                #'\nCanción referente: ' + artist['track_id'])  -  TODO: Implementar con listas conectadas
+                '\nNúmero de seguidores: ' + artist['followers'] +
+                '\nCanción referente: ' + cancion_referente)
             i += 1
 
 def printAlbumsTimeSpan(total):
@@ -198,12 +197,13 @@ def printAlbumsTimeSpan(total):
         i = 0
         for album in lt.iterator(ai):
             i += 1
+            artista_principal = controller.findMainArtist(album['artist_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + album['name'] +
                 '\nFecha de publicación: ' + album['release_date'] +
                 '\nTipo de album: ' + album['album_type'] + 
-                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nArtista principal asociado: ' + artista_principal +
                 '\nNúmero de canciones: ' + album['total_tracks'])
 
         print("\nÚltimos 3 albumes: ")
@@ -211,25 +211,26 @@ def printAlbumsTimeSpan(total):
         i = size-3
         for album in lt.iterator(af):
             i += 1
+            artista_principal = controller.findMainArtist(album['artist_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + album['name'] +
                 '\nFecha de publicación: ' + album['release_date'] +
                 '\nTipo de album: ' + album['album_type'] + 
-                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nArtista principal asociado: ' + artista_principal +
                 '\nNúmero de canciones: ' + album['total_tracks'])
     
     else:
         i = 0
         for album in lt.iterator(total):
             i += 1
-            artista_principal = controller.findMainArtist(album['artist_id'])
+            artista_principal = controller.findMainArtist(album['artist_id'], control)
             print(
                 str(i) + "." +
                 '\nNombre: ' + album['name'] +
                 '\nFecha de publicación: ' + album['release_date'] +
                 '\nTipo de album: ' + album['album_type'] + 
-                #'\nArtista principal asociado: ' + album['artist_id']  -  TODO: Implementar con listas conectadas
+                '\nArtista principal asociado: ' + artista_principal +
                 '\nNúmero de canciones: ' + album['total_tracks'])
 
 
@@ -287,11 +288,11 @@ while True:
     elif int(inputs[0]) == 1:
         anio_i = int(input("¿Desde qué año desea realizar su busqueda? (Por favor escriba los 4 dígitos del año) "))
         anio_f = int(input("¿Hasta qué año desea realizar su búsqueda? (Por favor escriba los 4 dígitos del año) "))
-        if anio_f < anio_i:
+        if anio_f < anio_i or anio_i < 1886 or anio_f > 2019:
             print("Por favor introduzca un intervalo de tiempo válido")
-            pass
-        numTotal = controller.albumsInTimeSpan(anio_i, anio_f, control)
-        printAlbumsTimeSpan(numTotal)
+        else:
+            numTotal = controller.albumsInTimeSpan(anio_i, anio_f, control)
+            printAlbumsTimeSpan(numTotal)
 
     elif int(inputs[0]) == 2:
         N = int(input("¿Cuántos artistas desea visualizar? "))

@@ -78,7 +78,7 @@ def loadData(control):
     return datos
 
 
-def loadTracks(catalog, filesize='small'):
+def loadTracks(catalog, filesize='large'):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -91,7 +91,7 @@ def loadTracks(catalog, filesize='small'):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog, filesize='small'):
+def loadArtists(catalog, filesize='large'):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
@@ -163,3 +163,15 @@ def albumsInTimeSpan(anio_i, anio_f, control):
     numTotal = model.albumsInTimeSpan(anio_i, anio_f, albums)
 
     return numTotal
+
+def findMainArtist(artID, control):
+    artists = control['model']['artists']
+    artName = model.findMainArtist(artID, artists)
+
+    return artName
+
+def findMainTrack(trackID, control):
+    tracks = control['model']['tracks']
+    trackName = model.findMainTrack(trackID, tracks)
+
+    return trackName

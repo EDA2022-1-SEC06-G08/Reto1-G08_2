@@ -142,14 +142,38 @@ def getLast(list):
 
 def albumsInTimeSpan(anio_i, anio_f, albums):
     DTanio_i = dt.datetime(anio_i, 1, 1, 0, 0, 0, 0)
-    DTanio_f = dt.datetime(anio_f, 1, 1, 0, 0, 0, 0)
+    DTanio_f = dt.datetime(anio_f, 12, 31, 0, 0, 0, 0)
 
     firstPos = bi.busqueda(albums, DTanio_i, floorAlbums)
     lastPos = bi.busqueda(albums, DTanio_f, ceilingAlbums)
 
-    numTotal = lt.subList(albums, firstPos, lastPos)
+    numTotal = lt.subList(albums, firstPos, lastPos-firstPos+1)
 
     return numTotal
+
+def findMainArtist(artID, artists):
+    found = False
+    i = 1
+    while not found and i <= lt.size(artists):
+        artist = lt.getElement(artists, i)
+        if artist['id'] == artID:
+            name = artist['name']
+            found = True
+        i += 1
+    
+    return name
+
+def findMainTrack(trackID, tracks):
+    found = False
+    i = 1
+    while not found and i <= lt.size(tracks):
+        track = lt.getElement(tracks, i)
+        if track['id'] == trackID:
+            name = track['name']
+            found = True
+        i += 1
+
+    return name
 
 
 #Funciones utilizadas para comparar elementos en una búsqueda
@@ -228,7 +252,7 @@ def floorAlbums(alb_list, current_pos, value):
         if current_true:
             return 0
         else:
-            return -1
+            return 1
 
     previous_true = prev >= value
 
@@ -250,7 +274,6 @@ def ceilingAlbums(alb_list, current_pos, value):
         else:
             return -1
 
-        
     nxt_true = nxt <= value
 
     if current_true:
@@ -262,8 +285,7 @@ def ceilingAlbums(alb_list, current_pos, value):
         return -1
 
 
-# Funciones utilizadas para comparar elementos en un
-# ordenamiento
+# Funciones utilizadas para comparar elementos en un ordenamiento
 
 
 def compareTracks(track1, track2,):
@@ -308,7 +330,7 @@ def compareArtists(artist1, artist2):
             return False
     value_n = compareName(artist1, artist2)
     if value_n != 0:
-        if value_f == 1:
+        if value_n == 1:
             return True
         else:
             return False
@@ -319,9 +341,7 @@ def comparePopularity(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene más popularidad, 0 si son iguales y -1 de lo contrario
     """
-    comp = int(
-        float(art1['artist_popularity'])) > int(
-        float(art2['artist_popularity']))
+    comp = int(float(art1['artist_popularity'])) > int(float(art2['artist_popularity']))
     if comp:
         return 1
     elif int(float(art1['artist_popularity'])) == int(float(art2['artist_popularity'])):
@@ -335,8 +355,7 @@ def compareFollowers(art1, art2):
     Devuelve 1 si el artista 1 tiene más seguidores, 0 si son iguales y -1 de lo contrario
     """
     comp = int(
-        float(art1['followers'])) > int(
-        float(art2['followers']))
+        float(art1['followers'])) > int(float(art2['followers']))
     if comp:
         return 1
     elif int(float(art1['followers'])) == int(float(art2['followers'])):
@@ -349,9 +368,7 @@ def compareName(art1, art2):
     """
     Devuelve 1 si el artista 1 tiene un nombre primero en el alfabeto, 0 si son iguales y -1 de lo contrario
     """
-    comp = (
-        str(art1['name']).lower()) < (
-        str(art2['name']).lower())
+    comp = str(art1['name']).lower() < str(art2['name']).lower()
     if comp:
         return 1
     elif (art1['name']) == (art2['name']):
@@ -396,16 +413,11 @@ def compareAlbums(alb1, alb2):
     return date1Format < date2Format
 
 
-# def compareAlbums():
-
-
 # Funciones de ordenamiento
 
 def sortTracks(catalog):
     sub_list = catalog["tracks"]
     me.sort(sub_list, compareTracks)
-
-# def sortAlbums():
 
 def sortArtists(artists):
     me.sort(artists, compareArtists)
