@@ -25,6 +25,7 @@
 
 
 import csv
+from multiprocessing.sharedctypes import Value
 import config as cf
 import sys
 import datetime as dt
@@ -318,6 +319,28 @@ def ceilingAlbums(alb_list, current_pos, value):
 # Funciones utilizadas para comparar elementos en un
 # ordenamiento
 
+def compareTracksAux(track1, track2,):
+
+    # Devuelve verdadero (True) si la 'popularity'
+    # del track1 es mayor que la del track2
+    # Args:
+
+    # track1: informacion del primer track que
+    # incluye su valor 'popularity'
+    # track2: informacion del segundo track que
+    # incluye su valor 'popularity'
+
+    toRank = ["popularity", "duration in min.", ]
+
+    for x in toRank:
+        if track1[x] != track2[x]:
+            return int(
+                float(track1[x])) > int(
+                float(track2[x]))
+    # no podemos pasar el nombre a float, por lo
+    # que hacemos esto en vez al final
+    return track1["name"] > track2["name"]
+
 
 def compareTracks(track1, track2,):
 
@@ -484,41 +507,97 @@ def sortAlbums(albums):
     me.sort(albums, compareAlbums)
 
 
-def sortArtists(catalog):
-    me.sort(catalog['artists'], compareArtists)
+def topTracks(control, n):
+    tracks = control["model"]["tracks"]
+    albums = control["model"]["albums"]
+    artists = control["model"]["artists"]
+    # lista con los mejores tracks
+    topTracks = lt.newList("ARRAY_LIST")
+    # lista con la informaicon de los mejores tracks
+    top = lt.newList("ARRAY_LIST")
+
+    for trackPos in range(n):
+        lt.addLast(
+            topTracks,
+            lt.getElement(
+                tracks,
+                trackPos + 1))
+
+    # topTracks ya tiene los top n tracks
+    while lt.size(topTracks) > 6:
+        lt.deleteElement(topTracks, 4)
+
+    # topTracks tiene 6 tracks o menos
+
+    # ordena albums de forma acendente
+    me.sort(albums, compareByID)
+
+    # ordena artists de forma acendente
+    me.sort(artists, compareByID)
+    delta = 0
+    if lt.size(topTracks) > 1:
+        delta = 1
+    for trackPos in range(lt.size(topTracks)):
+
+        # busca el album al que pertenece el track
+        albumID = lt.getElement(
+            topTracks, trackPos + 1 - delta)["album_id"]
+        albumPos = bi.busqueda(
+            albums, albumID, getByID)
+        album = lt.getElement(
+            albums, albumPos)["name"]
+        # encuentra el album al que pertenece el
+        # track
+
+        # busca el artista que produjo el track
+        artistIDs = str(
+            lt.getElement(
+                topTracks, trackPos + 1 - delta)
+            ["artists_id"][2: -2]).split(",")
+        artist = []
+        for artistID in artistIDs:
+            artistPos = bi.busqueda(
+                artists, artistID, getByID)
+            artist.append(lt.getElement(
+                artists, artistPos)["name"])
+
+        lt.addLast(
+            top, {
+                "name": lt.getElement(
+                    topTracks, trackPos)["name"],
+                "album": album,
+                "artist(s)": artist,
+                "popularity": lt.getElement(
+                    topTracks, trackPos)["popularity"],
+                "duration in min.": round(float(lt.getElement(
+                    topTracks, trackPos)["duration_ms"]) / 60000, 2),
+                "href": lt.getElement(
+                    topTracks, trackPos)["href"],
+                "lyrics": lt.getElement(
+                    topTracks, trackPos)["lyrics"]
+
+            })
+    me.sort(top, compareTracksAux)
+    return top
 
 
-# def topTracks(control, n):
-#     tracks = control["model"]["tracks"]
-#     albums = control["model"]["albums"]
-#     artists = control["model"]["artists"]
-#     topTracks = lt.newList("ARRAY_LIST")
+def getByID(alb_list, current_pos, value):
+    if lt.getElement(alb_list, current_pos)[
+            "id"] == value:
+        return 0
+    elif lt.getElement(alb_list, current_pos)[
+            "id"] < value:
+        return 1
+    else:
+        return -1
 
-#     for trackPos in range(1, n):
-#         addTrack(
-#             topTracks,
-#             lt.getElement(
-#                 tracks,
-#                 trackPos))
 
-#     # topTracks ya tiene los top n tracks
-#     top = lt.newList("ARRAY_LIST")
-#     while lt.size(topTracks) > 6:
-#         lt.deleteElement(topTracks, 4)
+def compareByID(track1, track2,):
 
-#     for trackPos in range(lt.size(topTracks)):
-#         for albumPos in range(lt.size(albums)):
-#             if lt.getElement(
-#                     topTracks,
-#                     trackPos)["album_id"] == lt.getElement(
-#                     albums,
-#                     albumPos)["id"]:
-#                 album = lt.getElement(
-#                     albums, albumPos)["name"]
-#         for
-#         lt.addLast(
-#             top, {
-#                 "name": lt.getElement(
-#                     topTracks, trackPos)["name"],
-#                 "album": album,
-#             })
+    toRank = ["id"]
+
+    for x in toRank:
+        if track1[x] != track2[x]:
+            return str(
+                track1[x]) < str(
+                track2[x])

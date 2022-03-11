@@ -305,7 +305,8 @@ def printMenu():
     print("3- Encontrar las canciones mas populares")
     # print(
     #     "4- Encontrar la canción más popular de un artista")
-    # print("5- Encontrar la discografía de un artista")
+    # print("5- Encontrar la discografía de un
+    # artista")
 
 
 first_op2 = True
@@ -366,31 +367,23 @@ while True:
                 print(
                     "por favor escoga un valor valido")
         controller.sortTracks(control)
-        print("TOP 1",
-              lt.getElement(
-                  control["model"]["tracks"],
-                  1)["name"])
-        # TODO: IMPRIMIR CORERECTAMENTE LA
-        # INFORMACIÓN
 
-# elif int(inputs[0]) == 3:
-    #     while True:
-    #         n = int(
-    #             input("Cuantas canciones del top desea consultar? "))
-    #         if 0 < n < datos["num_tracks"]:
-    #             break
-    #         else:
-    #             print(
-    #                 "por favor escoga un valor valido")
-    #     controller.sortTracks(control)
-    #     top = controller.topTracks(control, n)
-    #     print(
-    #         "TOP 1",
-    #         lt.getElement(
-    #             control["model"]["tracks"],
-    #             1)["name"])
-    #     # TODO: IMPRIMIR CORERECTAMENTE LA
-    #     # INFORMACIÓN
+        top = controller.topTracks(control, n)
+
+        for track in range(lt.size(top)):
+            trackInfo = lt.getElement(top, track)
+
+            if n <= 6:
+                print("Canción #", track + 1)
+            else:
+                if track + 1 <= 3:
+                    print("Canción #", track + 1)
+                else:
+                    print(
+                        "Canción #",
+                        track + 1 + n - 6)
+            for info in trackInfo:
+                print(info, ":", trackInfo[info])
 
     else:
         sys.exit(0)
@@ -407,7 +400,8 @@ while True:
 
         print(
             "Cargando información de los archivos ....\n")
-        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(control)
+        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(
+            control)
         printTracks(num_tracks, tracks_3i, tracks_3f)
         print("\n." * 10 + "\n")
         printArtists(

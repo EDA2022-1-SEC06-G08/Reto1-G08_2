@@ -29,6 +29,7 @@ import sys
 import csv
 
 maxInt = sys.maxsize
+size = "large"
 
 while True:
 
@@ -80,7 +81,7 @@ def loadData(control):
     return datos
 
 
-def loadTracks(catalog, filesize='large'):
+def loadTracks(catalog, filesize=size):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -93,7 +94,7 @@ def loadTracks(catalog, filesize='large'):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog, filesize='large'):
+def loadArtists(catalog, filesize=size):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
@@ -106,7 +107,7 @@ def loadArtists(catalog, filesize='large'):
     return model.artistSize(catalog)
 
 
-def loadAlbums(catalog, filesize='large'):
+def loadAlbums(catalog, filesize=size):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """
@@ -193,13 +194,3 @@ def topTracks(control, n):
     top = model.topTracks(control, n)
 
     return top
-
-# La respuesta esperada debe contener:
-
-    # o El nombre de la canción (name).
-    # o El nombre del álbum al que pertenece.
-    # o El o los nombres de los artistas involucrados.
-    # o Su valor de popularidad (popularity).
-    # o La duración en minutos (duration_ms).
-    # o El enlace externo de Spotify (href).
-    # o La letra (lyrics) si esta disponible.
