@@ -79,7 +79,7 @@ def loadData(control):
     return datos
 
 
-def loadTracks(catalog, filesize='small'):
+def loadTracks(catalog, filesize='10pct'):
     """
     Carga todos los tracks del archivo y los agrega a la lista de tracks
     """
@@ -92,7 +92,7 @@ def loadTracks(catalog, filesize='small'):
     return model.trackSize(catalog)
 
 
-def loadArtists(catalog, filesize='small'):
+def loadArtists(catalog, filesize='10pct'):
     """
     Carga todos los artistas del archivo y los agrega a la lista de artistas
     """
@@ -105,7 +105,7 @@ def loadArtists(catalog, filesize='small'):
     return model.artistSize(catalog)
 
 
-def loadAlbums(catalog, filesize='small'):
+def loadAlbums(catalog, filesize='10pct'):
     """
     Carga todos los álbumes del archivo y los agrega a la lista de álbumes
     """

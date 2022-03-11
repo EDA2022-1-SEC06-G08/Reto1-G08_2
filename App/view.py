@@ -25,7 +25,7 @@ import config as cf
 import sys
 import csv
 import controller
-import datetime as dt
+import time
 from DISClib.ADT import list as lt
 assert cf
 
@@ -143,7 +143,7 @@ def printAlbums(num, Al_3i, Al_3f):
             album['release_date'])
 
 
-def printRanking(lista, N):
+def printRanking(lista, N, control):
     i = 1
     print(
         "\n\nPrimeros " +
@@ -220,7 +220,7 @@ def printRanking(lista, N):
             i += 1
 
 
-def printAlbumsTimeSpan(total):
+def printAlbumsTimeSpan(total, control):
     size = lt.size(total)
     print(
         "\n\nNúmero total de álbumes en el periodo: " +
@@ -283,19 +283,27 @@ def printAlbumsTimeSpan(total):
                 album['total_tracks'])
 
 
-def printBestTrack(best_track, numTracks, numAlbums, album, artist, market):
+def printBestTrack(best_track, numTracks, numAlbums, album, involved_artists, artist, market):
     artist_name = artist['name']
     release_date = controller.dateFormat(album['release_date'])
+    if best_track['lyrics'] == '-99':
+        lyrics = "Letra de la canción NO disponible"
+    else:
+        lyrics = best_track['lyrics']
+    # TODO: album, involved artists
     print('El número total de canciones asociadas a', artist_name, 'es:', numTracks)
     print('El número total de álbumes de', artist_name, 'es:', numAlbums)
     print('\nLa mejor canción de', artist_name, 'diponible en el mercado de', market, 'es la siguiente:')
     print('Nombre', best_track['name'])
     print('Nombre del álbum de la canción:', album)
     print('Fecha de publicación:', release_date)
-    print('Artistas Involucrados:', )
+    print('Artistas Involucrados:')
+    for i in involved_artists:
+        print(i)
     print('Tiempo de duración (ms):', best_track['duration'])
+    print('Popularidad:', best_track['popularity'])
     print('Enlace al audio de muestra:', best_track['preview_url'])
-    print('Letra de la canción',)
+    print('Letra de la canción', lyrics)
 
 
 
@@ -314,6 +322,21 @@ def dataReport(datos):
         datos["num_albums"],
         datos["albums_3i"],
         datos["albums_3f"])
+
+#Funciones de tiempo
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter() * 1000)
+
+
+def deltaTime(start, end):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed
 
 
 # Interfaz
@@ -360,11 +383,14 @@ while True:
             print(
                 "Por favor introduzca un intervalo de tiempo válido")
         else:
+            time1 = getTime()
             numTotal = controller.albumsInTimeSpan(
                 anio_i,
                 anio_f,
                 control)
-            printAlbumsTimeSpan(numTotal)
+            printAlbumsTimeSpan(numTotal, control)
+            time2 = getTime()
+            print(deltaTime(time1, time2))
 
     elif int(inputs[0]) == 2:
         N = int(
@@ -372,10 +398,13 @@ while True:
         if N < 1 or N > 56129:
             print(
                 "Por favor ingrese un número válido de artistas")
-            pass
-        lista = controller.rankingArtistas(
-            control, N)
-        printRanking(lista, N)
+        else:
+            time1 = getTime()
+            lista = controller.rankingArtistas(
+                control, N)
+            printRanking(lista, N, control)
+            time2 = getTime()
+            print(deltaTime(time1, time2))
 
     elif int(inputs[0]) == 3:
         while True:
@@ -398,8 +427,11 @@ while True:
         artist = input("Introduzca el artista que desea analizar: ")
         market = input("Introduzca las dos siglas del mercado que desea analizar (Alpha 2): ")
 
+        time1 = getTime()
         best_track, numTracks, numAlbums = controller.findBestTrack(artist,market,control)
         printBestTrack(best_track, numTracks, numAlbums, artist, market)
+        time2 = getTime()
+        print(deltaTime(time1, time2))
 
 
 # elif int(inputs[0]) == 3:
@@ -423,7 +455,11 @@ while True:
 
     else:
         sys.exit(0)
-    """
+    
+    
+
+
+"""
     elif int(inputs[0]) == 6:
         sort_type = input(
             "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")

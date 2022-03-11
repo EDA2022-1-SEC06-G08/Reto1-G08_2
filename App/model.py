@@ -325,7 +325,6 @@ def ceilingAlbums(alb_list, current_pos, value):
     else:
         return -1
 
-
 # Funciones utilizadas para comparar elementos en un
 # ordenamiento
 
