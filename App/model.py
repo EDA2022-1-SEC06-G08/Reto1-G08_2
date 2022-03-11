@@ -208,17 +208,18 @@ def findMainTrack(trackID, tracks):
 
 def findBestTrack(artist, market, tracks):
     artistID = artist['id']
-    found = False
     best_track = None
     i = 1
 
-    while not found and i <= lt.size(tracks):
+    while i <= lt.size(tracks):
         track = lt.getElement(tracks, i)
         track_artists = track['artists_id']
         track_markets = track ['available_markets']
         if artistID in track_artists and market in track_markets:
-            best_track = track
-            found = True
+            if best_track == None:
+                best_track = track
+            elif best_track['popularity'] < track['popularity']:
+                best_track = track
         i += 1
     
     return best_track
@@ -244,6 +245,48 @@ def findnumAlbums(artist, albums):
             numAlbums += 1
     
     return numAlbums
+
+def findArtistByName(artists, artistName):
+    found = False
+    artist_wanted = None
+    i = 1
+
+    while not found and i <= lt.size(artists):
+        artist = lt.getElement(artists, i)
+        if artistName == artist['name']:
+            artist_wanted = artist
+            found = True
+        i += 1
+    
+    return artist_wanted
+
+def findAlbum(albumID, albums):
+    found = False
+    album = None
+    i = 1
+
+    while not found and i <= lt.size(albums):
+        album = lt.getElement(albums, i)
+        if albumID == lt.getElement(albums, i):
+            album = lt.getElement(albums, i)
+            found = True
+        i += 1
+    
+    return album
+
+def findInvolvedArtists(artistsID, artists):
+    counter = len(artistsID)
+    artists_list = lt.newList("ARRAY_LIST")
+    i = 1
+
+    while counter != 0 and i <= lt.size(artists):
+        artist = lt.getElement(artists, i)
+        if artist['id'] in artistsID:
+            lt.addLast(artists_list, artist)
+            counter -= 1
+        i += 1
+    
+    return artists_list
 
 # Funciones utilizadas para comparar elementos en una
 # búsqueda
@@ -527,6 +570,7 @@ def topTracks(control, n):
         album = lt.getElement(
             albums, albumPos)["name"]
         # encuentra el album al que pertenece el
+        
         # track
 
         # busca el artista que produjo el track

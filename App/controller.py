@@ -28,7 +28,7 @@ import sys
 import csv
 
 maxInt = sys.maxsize
-size = "large"
+size = "small"
 
 while True:
 
@@ -131,8 +131,8 @@ def rankingArtistas(control, N):
 
 # Funciones para la creación de datos
 
-def dateFormat(date):
-    date_format = model.dateFormat(date)
+def dateFormat(date, date_precision):
+    date_format = model.dateFormat(date, date_precision)
 
     return date_format
 
@@ -195,16 +195,22 @@ def findMainTrack(trackID, control):
     return trackName
 
 
-def findBestTrack(artist, market, control):
+def findBestTrack(artistName, market, control):
     tracks = control['model']['tracks']
-    albums = control['model']['tracks']
+    albums = control['model']['albums']
+    artists = control['model']['artists']
 
+    artist = model.findArtistByName(artists, artistName)
+    if artist == None:
+        return None, None, None, None, None
     best_track = model.findBestTrack(
         artist, market, tracks)
     numTracks = model.findnumTracks(artist, tracks)
     numAlbums = model.findnumAlbums(artist, albums)
+    album = model.findAlbum(best_track['album_id'], albums)
+    involved_artists = model.findInvolvedArtists(best_track['artists_id'], artists)
 
-    return best_track, numTracks, numAlbums
+    return best_track, numTracks, numAlbums, album, involved_artists
 
 
 def topTracks(control, n):

@@ -297,9 +297,9 @@ def printBestTrack(
         involved_artists,
         artist,
         market):
-    artist_name = artist['name']
+    #artist_name = artist['name']
     release_date = controller.dateFormat(
-        album['release_date'])
+        album['release_date'], album['release_date_precision'])
     if best_track['lyrics'] == '-99':
         lyrics = "Letra de la canción NO disponible"
     else:
@@ -307,26 +307,26 @@ def printBestTrack(
     # TODO: album, involved artists
     print(
         'El número total de canciones asociadas a',
-        artist_name,
+        artist,
         'es:',
         numTracks)
     print('El número total de álbumes de',
-          artist_name, 'es:', numAlbums)
+          artist, 'es:', numAlbums)
     print(
         '\nLa mejor canción de',
-        artist_name,
+        artist,
         'diponible en el mercado de',
         market,
         'es la siguiente:')
     print('Nombre', best_track['name'])
-    print('Nombre del álbum de la canción:', album)
+    print('Nombre del álbum de la canción:', album['name'])
     print('Fecha de publicación:', release_date)
     print('Artistas Involucrados:')
-    for i in involved_artists:
-        print(i)
+    for i in lt.iterator(involved_artists):
+        print(i['name'])
     print(
         'Tiempo de duración (ms):',
-        best_track['duration'])
+        best_track['duration_ms'])
     print('Popularidad:', best_track['popularity'])
     print(
         'Enlace al audio de muestra:',
@@ -377,13 +377,11 @@ def printMenu():
         "1- Encontrar los álbumes en un periodo de tiempo")
     print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
-    # print(
-    #     "4- Encontrar la canción más popular de un artista")
+    print("4- Encontrar la canción más popular de un artista")
     # print("5- Encontrar la discografía de un
     # artista")
 
 
-first_op2 = True
 """
 Menu principal
 """
@@ -471,16 +469,21 @@ while True:
             "Introduzca las dos siglas del mercado que desea analizar (Alpha 2): ")
 
         time1 = getTime()
-        best_track, numTracks, numAlbums = controller.findBestTrack(
+        best_track, numTracks, numAlbums, album, involved_artists = controller.findBestTrack(
             artist, market, control)
-        printBestTrack(
-            best_track,
-            numTracks,
-            numAlbums,
-            artist,
-            market)
-        time2 = getTime()
-        print(deltaTime(time1, time2))
+        if best_track == None:
+            print("Artista no encontrado")
+        else:
+            printBestTrack(
+                best_track,
+                numTracks,
+                numAlbums,
+                album,
+                involved_artists,
+                artist,
+                market)
+            time2 = getTime()
+            print(deltaTime(time1, time2))
     else:
         sys.exit(0)
 
