@@ -218,7 +218,7 @@ def findBestTrack(artist, market, tracks):
         track_artists = track['artists_id']
         track_markets = track['available_markets']
         if artistID in track_artists and market in track_markets:
-            if best_track == None:
+            if best_track is None:
                 best_track = track
             elif best_track['popularity'] < track['popularity']:
                 best_track = track
@@ -250,6 +250,7 @@ def findnumAlbums(artist, albums):
 
     return numAlbums
 
+
 def findArtistByName(artists, artistName):
     found = False
     artist_wanted = None
@@ -261,8 +262,9 @@ def findArtistByName(artists, artistName):
             artist_wanted = artist
             found = True
         i += 1
-    
+
     return artist_wanted
+
 
 def findAlbum(albumID, albums):
     found = False
@@ -275,8 +277,9 @@ def findAlbum(albumID, albums):
             album = lt.getElement(albums, i)
             found = True
         i += 1
-    
+
     return album
+
 
 def findInvolvedArtists(artistsID, artists):
     counter = len(artistsID)
@@ -289,7 +292,7 @@ def findInvolvedArtists(artistsID, artists):
             lt.addLast(artists_list, artist)
             counter -= 1
         i += 1
-    
+
     return artists_list
 
 # Funciones utilizadas para comparar elementos en una
@@ -579,7 +582,7 @@ def topTracks(control, n):
         album = lt.getElement(
             albums, albumPos)["name"]
         # encuentra el album al que pertenece el
-        
+
         # track
 
         # busca el artista que produjo el track
@@ -639,7 +642,8 @@ def compareByID(track1, track2,):
 def findDiscography(control, artist):
     albums = control["model"]["albums"]
     artists = control["model"]["artists"]
-
+    tracks = control["model"]["tracks"]
+    me.sort(albums, compareAlbums)
     albumAmount = {
         "sencillos": 0,
         "recopilaciónes": 0,
@@ -652,6 +656,8 @@ def findDiscography(control, artist):
             artistID = eachArtist["id"]
     if artistID is None:
         print("artista no encontrado")
+    albumes = lt.newList("ARRAY_LIST")
+
     for album in lt.iterator(albums):
         if album["artist_id"] == artistID:
             if album["album_type"] == "single":
@@ -660,4 +666,15 @@ def findDiscography(control, artist):
                 albumAmount["compilation"] += 1
             elif album["album_type"] == "album":
                 albumAmount["álbumes"] += 1
-    return albumAmount
+        lt.addLast(
+            albumes, {
+                "fecha de publicación": album["release_date"],
+                "nombre del album": album["name"],
+                "numero de canciones": int(float(album["total_tracks"])),
+                "tipo de album": album["album_type"],
+                "nombre del artista": artist
+            })
+    while lt.size(albumes) > 6:
+        lt.deleteElement(albumes, 4)
+
+    return albumAmount, albumes

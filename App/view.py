@@ -299,7 +299,8 @@ def printBestTrack(
         market):
     #artist_name = artist['name']
     release_date = controller.dateFormat(
-        album['release_date'], album['release_date_precision'])
+        album['release_date'],
+        album['release_date_precision'])
     if best_track['lyrics'] == '-99':
         lyrics = "Letra de la canción NO disponible"
     else:
@@ -319,7 +320,9 @@ def printBestTrack(
         market,
         'es la siguiente:')
     print('Nombre', best_track['name'])
-    print('Nombre del álbum de la canción:', album['name'])
+    print(
+        'Nombre del álbum de la canción:',
+        album['name'])
     print('Fecha de publicación:', release_date)
     print('Artistas Involucrados:')
     for i in lt.iterator(involved_artists):
@@ -471,7 +474,7 @@ while True:
         time1 = getTime()
         best_track, numTracks, numAlbums, album, involved_artists = controller.findBestTrack(
             artist, market, control)
-        if best_track == None:
+        if best_track is None:
             print("Artista no encontrado")
         else:
             printBestTrack(
@@ -490,41 +493,33 @@ while True:
             "Introduzca el artista que desea analizar: ")
 
         controller.sortTracks(control)
-        discography = controller.findDiscography(
-            control,
-            artist)
+        discography, albumes = controller.findDiscography(
+            control, artist)
 
         print("Este artista tiene:")
 
         for type in discography:
             print(discography[type], type)
 
+        for album in range(lt.size(albumes)):
+            albumInfo = lt.getElement(albumes, album)
+
+            if lt.size(albumes) <= 6:
+                print("Album #", album + 1)
+            else:
+                if album + 1 <= 3:
+                    print("Album #", album + 1)
+                else:
+                    print(
+                        "Album #",
+                        album +
+                        1 +
+                        lt.size(albumes) -
+                        6)
+
+            for info in albumInfo:
+                print(info, ":", albumInfo[info])
+                print()
+
     else:
         sys.exit(0)
-
-"""
-    elif int(inputs[0]) == 6:
-        sort_type = input(
-            "¿Qué tipo de ordenamiento desea usar (selection, insertion, shell, merge o quick)? ")
-        print('Por favor espere . . .')
-        time = controller.sortBy(sort_type, control)
-        if bool(time):
-            print(str(round(time, 2)) + ' ms')
-        else:
-            print("por favor escoga una opción valida")
-
-        print(
-            "Cargando información de los archivos ....\n")
-        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(
-            control)
-        printTracks(num_tracks, tracks_3i, tracks_3f)
-        print("\n." * 10 + "\n")
-        printArtists(
-            num_artists,
-            artists_3i,
-            artists_3f)
-        print("\n." * 10 + "\n")
-        printAlbums(num_albums, albums_3i, albums_3f)
-        print(control['model']['time_album'])
-
-    """
