@@ -153,7 +153,7 @@ def printRanking(lista, N, control):
         for artist in lt.iterator(lista):
             cancion_referente = controller.findMainTrack(
                 artist['track_id'], control)
-            if cancion_referente == None:
+            if cancion_referente is None:
                 cancion_referente = "Canción no encontrada"
             print(
                 str(i) +
@@ -175,7 +175,7 @@ def printRanking(lista, N, control):
         for artist in lt.iterator(ai):
             cancion_referente = controller.findMainTrack(
                 artist['track_id'], control)
-            if cancion_referente == None:
+            if cancion_referente is None:
                 cancion_referente = "Canción no encontrada"
             print(
                 str(i) +
@@ -202,7 +202,7 @@ def printRanking(lista, N, control):
         for artist in lt.iterator(af):
             cancion_referente = controller.findMainTrack(
                 artist['track_id'], control)
-            if cancion_referente == None:
+            if cancion_referente is None:
                 cancion_referente = "Canción no encontrada"
             print(
                 str(i) +
@@ -233,7 +233,7 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
-            if artista_principal == None:
+            if artista_principal is None:
                 artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
@@ -254,7 +254,7 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
-            if artista_principal == None:
+            if artista_principal is None:
                 artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
@@ -274,7 +274,7 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
-            if artista_principal == None:
+            if artista_principal is None:
                 artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
@@ -289,28 +289,49 @@ def printAlbumsTimeSpan(total, control):
                 album['total_tracks'])
 
 
-def printBestTrack(best_track, numTracks, numAlbums, album, involved_artists, artist, market):
+def printBestTrack(
+        best_track,
+        numTracks,
+        numAlbums,
+        album,
+        involved_artists,
+        artist,
+        market):
     artist_name = artist['name']
-    release_date = controller.dateFormat(album['release_date'])
+    release_date = controller.dateFormat(
+        album['release_date'])
     if best_track['lyrics'] == '-99':
         lyrics = "Letra de la canción NO disponible"
     else:
         lyrics = best_track['lyrics']
     # TODO: album, involved artists
-    print('El número total de canciones asociadas a', artist_name, 'es:', numTracks)
-    print('El número total de álbumes de', artist_name, 'es:', numAlbums)
-    print('\nLa mejor canción de', artist_name, 'diponible en el mercado de', market, 'es la siguiente:')
+    print(
+        'El número total de canciones asociadas a',
+        artist_name,
+        'es:',
+        numTracks)
+    print('El número total de álbumes de',
+          artist_name, 'es:', numAlbums)
+    print(
+        '\nLa mejor canción de',
+        artist_name,
+        'diponible en el mercado de',
+        market,
+        'es la siguiente:')
     print('Nombre', best_track['name'])
     print('Nombre del álbum de la canción:', album)
     print('Fecha de publicación:', release_date)
     print('Artistas Involucrados:')
     for i in involved_artists:
         print(i)
-    print('Tiempo de duración (ms):', best_track['duration'])
+    print(
+        'Tiempo de duración (ms):',
+        best_track['duration'])
     print('Popularidad:', best_track['popularity'])
-    print('Enlace al audio de muestra:', best_track['preview_url'])
+    print(
+        'Enlace al audio de muestra:',
+        best_track['preview_url'])
     print('Letra de la canción', lyrics)
-
 
 
 def dataReport(datos):
@@ -329,7 +350,9 @@ def dataReport(datos):
         datos["albums_3i"],
         datos["albums_3f"])
 
-#Funciones de tiempo
+# Funciones de tiempo
+
+
 def getTime():
     """
     devuelve el instante tiempo de procesamiento en milisegundos
@@ -356,7 +379,8 @@ def printMenu():
     print("3- Encontrar las canciones mas populares")
     # print(
     #     "4- Encontrar la canción más popular de un artista")
-    # print("5- Encontrar la discografía de un artista")
+    # print("5- Encontrar la discografía de un
+    # artista")
 
 
 first_op2 = True
@@ -422,47 +446,43 @@ while True:
                 print(
                     "por favor escoga un valor valido")
         controller.sortTracks(control)
-        print("TOP 1",
-              lt.getElement(
-                  control["model"]["tracks"],
-                  1)["name"])
-        # TODO: IMPRIMIR CORERECTAMENTE LA
-        # INFORMACIÓN
-    
+
+        top = controller.topTracks(control, n)
+
+        for track in range(lt.size(top)):
+            trackInfo = lt.getElement(top, track)
+
+            if n <= 6:
+                print("Canción #", track + 1)
+            else:
+                if track + 1 <= 3:
+                    print("Canción #", track + 1)
+                else:
+                    print(
+                        "Canción #",
+                        track + 1 + n - 6)
+            for info in trackInfo:
+                print(info, ":", trackInfo[info])
+
     elif int(inputs[0]) == 4:
-        artist = input("Introduzca el artista que desea analizar: ")
-        market = input("Introduzca las dos siglas del mercado que desea analizar (Alpha 2): ")
+        artist = input(
+            "Introduzca el artista que desea analizar: ")
+        market = input(
+            "Introduzca las dos siglas del mercado que desea analizar (Alpha 2): ")
 
         time1 = getTime()
-        best_track, numTracks, numAlbums = controller.findBestTrack(artist,market,control)
-        printBestTrack(best_track, numTracks, numAlbums, artist, market)
+        best_track, numTracks, numAlbums = controller.findBestTrack(
+            artist, market, control)
+        printBestTrack(
+            best_track,
+            numTracks,
+            numAlbums,
+            artist,
+            market)
         time2 = getTime()
         print(deltaTime(time1, time2))
-
-
-# elif int(inputs[0]) == 3:
-    #     while True:
-    #         n = int(
-    #             input("Cuantas canciones del top desea consultar? "))
-    #         if 0 < n < datos["num_tracks"]:
-    #             break
-    #         else:
-    #             print(
-    #                 "por favor escoga un valor valido")
-    #     controller.sortTracks(control)
-    #     top = controller.topTracks(control, n)
-    #     print(
-    #         "TOP 1",
-    #         lt.getElement(
-    #             control["model"]["tracks"],
-    #             1)["name"])
-    #     # TODO: IMPRIMIR CORERECTAMENTE LA
-    #     # INFORMACIÓN
-
     else:
         sys.exit(0)
-    
-    
 
 
 """
@@ -478,7 +498,8 @@ while True:
 
         print(
             "Cargando información de los archivos ....\n")
-        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(control)
+        num_tracks, num_artists, num_albums, tracks_3i, tracks_3f, artists_3i, artists_3f, albums_3i, albums_3f = loadData(
+            control)
         printTracks(num_tracks, tracks_3i, tracks_3f)
         print("\n." * 10 + "\n")
         printArtists(
