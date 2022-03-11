@@ -233,6 +233,8 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
+            if artista_principal == None:
+                artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
                 album['name'] +
@@ -252,6 +254,8 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
+            if artista_principal == None:
+                artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
                 album['name'] +
@@ -270,6 +274,8 @@ def printAlbumsTimeSpan(total, control):
             i += 1
             artista_principal = controller.findMainArtist(
                 album['artist_id'], control)
+            if artista_principal == None:
+                artista_principal = 'Artista no encontrado'
             print(
                 str(i) + "." + '\nNombre: ' +
                 album['name'] +

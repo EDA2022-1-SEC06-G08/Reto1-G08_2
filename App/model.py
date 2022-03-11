@@ -181,6 +181,7 @@ def albumsInTimeSpan(anio_i, anio_f, albums):
 def findMainArtist(artID, artists):
     found = False
     i = 1
+    name = None
     while not found and i <= lt.size(artists):
         artist = lt.getElement(artists, i)
         if artist['id'] == artID:
