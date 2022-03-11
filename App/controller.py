@@ -212,3 +212,9 @@ def topTracks(control, n):
     top = model.topTracks(control, n)
 
     return top
+
+
+def findDiscography(control, artist):
+    discography = model.findDiscography(
+        control, artist)
+    return discography

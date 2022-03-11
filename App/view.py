@@ -377,10 +377,9 @@ def printMenu():
         "1- Encontrar los álbumes en un periodo de tiempo")
     print("2- Encontrar los artistas más populares")
     print("3- Encontrar las canciones mas populares")
-    # print(
-    #     "4- Encontrar la canción más popular de un artista")
-    # print("5- Encontrar la discografía de un
-    # artista")
+    print(
+        "4- Encontrar la canción más popular de un artista")
+    print("5- Encontrar la discografía de un artista")
 
 
 first_op2 = True
@@ -481,9 +480,22 @@ while True:
             market)
         time2 = getTime()
         print(deltaTime(time1, time2))
+    elif int(inputs[0]) == 5:
+        artist = input(
+            "Introduzca el artista que desea analizar: ")
+
+        controller.sortTracks(control)
+        discography = controller.findDiscography(
+            control,
+            artist)
+
+        print("Este artista tiene:")
+
+        for type in discography:
+            print(discography[type], type)
+
     else:
         sys.exit(0)
-
 
 """
     elif int(inputs[0]) == 6:

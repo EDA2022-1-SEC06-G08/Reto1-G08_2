@@ -116,6 +116,7 @@ def rankingArtistas(artists, N):
 
     return sublista
 
+
 def dateFormat(date, date_precision):
     if date_precision == 'day':
         date_format = DT.strptime(
@@ -206,6 +207,7 @@ def findMainTrack(trackID, tracks):
 
     return name
 
+
 def findBestTrack(artist, market, tracks):
     artistID = artist['id']
     found = False
@@ -215,13 +217,14 @@ def findBestTrack(artist, market, tracks):
     while not found and i <= lt.size(tracks):
         track = lt.getElement(tracks, i)
         track_artists = track['artists_id']
-        track_markets = track ['available_markets']
+        track_markets = track['available_markets']
         if artistID in track_artists and market in track_markets:
             best_track = track
             found = True
         i += 1
-    
+
     return best_track
+
 
 def findnumTracks(artist, tracks):
     artistID = artist['id']
@@ -231,8 +234,9 @@ def findnumTracks(artist, tracks):
     for track in lt.iterator(tracks):
         if artistID in track['artists_id']:
             numTracks += 1
-    
+
     return numTracks
+
 
 def findnumAlbums(artist, albums):
     artistID = artist['id']
@@ -242,11 +246,12 @@ def findnumAlbums(artist, albums):
     for album in lt.iterator(albums):
         if artistID == album['artist_id']:
             numAlbums += 1
-    
+
     return numAlbums
 
 # Funciones utilizadas para comparar elementos en una
 # búsqueda
+
 
 def searchAlbumTime(alb_list, current_pos):
     bottom = False
@@ -261,14 +266,16 @@ def searchAlbumTime(alb_list, current_pos):
     current_date = current_album['release_date']
     current_date_precision = current_album['release_date_precision']
 
-    current_date_format = dateFormat(current_date, current_date_precision)
+    current_date_format = dateFormat(
+        current_date, current_date_precision)
 
     if not bottom:
         previous_album = lt.getElement(
             alb_list, current_pos - 1)
         previous_date = previous_album['release_date']
         previous_date_precision = previous_album['release_date_precision']
-        previous_date_format = dateFormat(previous_date, previous_date_precision)
+        previous_date_format = dateFormat(
+            previous_date, previous_date_precision)
     else:
         previous_date_format = -1
 
@@ -277,7 +284,8 @@ def searchAlbumTime(alb_list, current_pos):
             alb_list, current_pos + 1)
         next_date = next_album['release_date']
         next_date_precision = next_album['release_date_precision']
-        next_date_format = dateFormat(next_date, next_date_precision)
+        next_date_format = dateFormat(
+            next_date, next_date_precision)
     else:
         next_date_format = -1
 
@@ -329,6 +337,7 @@ def ceilingAlbums(alb_list, current_pos, value):
 
 # Funciones utilizadas para comparar elementos en un
 # ordenamiento
+
 
 def compareTracksAux(track1, track2,):
 
@@ -581,3 +590,30 @@ def compareByID(track1, track2,):
             return str(
                 track1[x]) < str(
                 track2[x])
+
+
+def findDiscography(control, artist):
+    albums = control["model"]["albums"]
+    artists = control["model"]["artists"]
+
+    albumAmount = {
+        "sencillos": 0,
+        "recopilaciónes": 0,
+        "álbumes": 0
+    }
+    artistID = None
+    for eachArtist in lt.iterator(artists):
+
+        if eachArtist["name"] == artist:
+            artistID = eachArtist["id"]
+    if artistID is None:
+        print("artista no encontrado")
+    for album in lt.iterator(albums):
+        if album["artist_id"] == artistID:
+            if album["album_type"] == "single":
+                albumAmount["sencillos"] += 1
+            elif album["album_type"] == "recopilaciónes":
+                albumAmount["compilation"] += 1
+            elif album["album_type"] == "album":
+                albumAmount["álbumes"] += 1
+    return albumAmount
